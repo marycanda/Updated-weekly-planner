@@ -17,7 +17,9 @@
   --text:#f0e8dc;--text2:#a89880;--text3:#6b5a47;
   --work:#1a2a1e;--work-b:#5aac6e;--work-t:#a8e0b4;
   --pilates:#2a1a3e;--pilates-b:#b87ef0;--pilates-t:#e8d0ff;
-  --strength:#2e1800;--strength-b:#f07828;--strength-t:#ffd4a8;
+  --strength:#2e1800;--strength-b-bg:#0e2a2a;
+  --strength-b:#f07828;--strength-t:#ffd4a8;
+  --strength-a-b:#2ab8a8;--strength-a-t:#90f0e0;
   --run:#1e1a0a;--run-b:#c8a832;--run-t:#f0e090;
   --yoga:#2a2200;--yoga-b:#e8c832;--yoga-t:#fff0a0;
   --climb:#2a1a08;--climb-b:#c87a20;--climb-t:#f0c080;
@@ -89,14 +91,24 @@ header{display:flex;align-items:flex-end;justify-content:space-between;margin-bo
 .cell.work.s  {border-color:rgba(90,172,110,.65);}
 .cell.work.e  {border-color:rgba(90,172,110,.5);}
 .cell.pilates {background:var(--pilates); border-color:rgba(184,126,240,.45); color:var(--pilates-t);}
-.cell.strength{background:var(--strength);border-color:rgba(240,120,40,.45);  color:var(--strength-t);}
-.cell.pilates.run  {background:var(--pilates); border-color:rgba(184,126,240,.6);  color:var(--pilates-t);opacity:.85;}
-.cell.strength.run {background:var(--strength);border-color:rgba(240,120,40,.6);   color:var(--strength-t);opacity:.85;}
+.cell.strength   {background:var(--strength);border-color:rgba(240,120,40,.45);  color:var(--strength-t);}
+.cell.strength-a {background:#0e2a2a;     border-color:rgba(42,184,168,.45);   color:#90f0e0;}
+.cell.strength-b {background:var(--strength);border-color:rgba(240,120,40,.45);color:var(--strength-t);}
+.cell.pilates.run    {background:var(--pilates); border-color:rgba(184,126,240,.6);  color:var(--pilates-t);opacity:.85;}
+.cell.strength.run   {background:var(--strength);border-color:rgba(240,120,40,.6);   color:var(--strength-t);opacity:.85;}
+.cell.strength-a.run {background:#0e2a2a;        border-color:rgba(42,184,168,.6);   color:#90f0e0;opacity:.85;}
+.cell.strength-b.run {background:var(--strength);border-color:rgba(240,120,40,.6);   color:var(--strength-t);opacity:.85;}
 .cell.run     {background:var(--run);     border-color:rgba(200,168,50,.4);   color:var(--run-t);}
 .cell.yoga    {background:var(--yoga);    border-color:rgba(232,200,50,.45);  color:var(--yoga-t);}
 .cell.climb   {background:var(--climb);   border-color:rgba(200,122,32,.45);  color:var(--climb-t);}
 .cell.surf    {background:var(--surf);    border-color:rgba(58,158,200,.4);   color:var(--surf-t);}
-.cell.appt    {background:var(--appt);    border-color:rgba(224,80,80,.45);   color:var(--appt-t);}
+.cell.appt    {background:var(--appt);    border-color:rgba(224,80,80,.45);   color:var(--appt-t);cursor:pointer;position:relative;}
+
+/* appointment popup box */
+.appt-bubble{position:fixed;z-index:999;background:#1e0a0a;border:1px solid rgba(224,80,80,.5);border-radius:8px;padding:12px 14px;width:200px;box-shadow:0 4px 24px rgba(0,0,0,.6);}
+.appt-bubble-title{font-size:12px;font-weight:500;color:var(--appt-t);font-family:'DM Mono',monospace;margin-bottom:4px;}
+.appt-bubble-time{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:4px;}
+.appt-bubble-notes{font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;line-height:1.5;border-top:1px solid rgba(224,80,80,.2);padding-top:6px;margin-top:4px;}
 .cell.sleep   {background:var(--sleep);   color:var(--sleep-t);}
 .cell.commute {background:var(--commute); border-color:rgba(255,220,180,.04); color:var(--commute-t);}
 .cell.free    {background:transparent;   border-color:var(--border);          color:var(--free-t);}
@@ -112,8 +124,10 @@ header{display:flex;align-items:flex-end;justify-content:space-between;margin-bo
 .opt-gap{grid-column:1 / -1;height:5px;}
 
 .wk-cell{height:42px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;text-align:center;padding:2px 3px;cursor:pointer;border:1px solid;transition:all .15s;letter-spacing:.02em;user-select:none;font-family:'DM Mono',monospace;}
-.wk-cell.pilates-mode {background:var(--pilates); border-color:rgba(184,126,240,.55); color:var(--pilates-t);}
-.wk-cell.strength-mode{background:var(--strength);border-color:rgba(240,120,40,.55);  color:var(--strength-t);}
+.wk-cell.pilates-mode  {background:var(--pilates); border-color:rgba(184,126,240,.55); color:var(--pilates-t);}
+.wk-cell.strength-mode {background:var(--strength); border-color:rgba(240,120,40,.55);  color:var(--strength-t);}
+.wk-cell.strength-a-mode{background:#0e2a2a;border:1px solid rgba(42,184,168,.55);color:#90f0e0;}
+.wk-cell.strength-b-mode{background:var(--strength);border:1px solid rgba(240,120,40,.55);color:var(--strength-t);}
 .wk-cell.inactive{background:var(--bg3);border:1px dashed rgba(255,220,180,.1);color:var(--text3);}
 
 .yoga-cell{height:42px;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;text-align:center;padding:4px 3px;cursor:pointer;border:1px dashed rgba(255,220,180,.1);background:var(--bg3);color:var(--text3);transition:border-color .15s;letter-spacing:.02em;user-select:none;font-family:'DM Mono',monospace;}
@@ -137,6 +151,35 @@ header{display:flex;align-items:flex-end;justify-content:space-between;margin-bo
 .opt-cell.opt-disabled{opacity:.18;cursor:default;}
 .opt-cell.opt-locked{opacity:.32;cursor:not-allowed;}
 
+.rotation-bar{margin-top:1.25rem;background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:1rem 1.25rem;}
+.rotation-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.rotation-row{display:flex;flex-direction:column;gap:8px;}
+.rot-section{border-radius:8px;overflow:hidden;border:1px solid var(--border);}
+.rot-header{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;cursor:pointer;user-select:none;transition:background .15s;}
+.rot-header:hover{background:var(--surface2);}
+.rot-header.sa{border-left:3px solid #2ab8a8;}
+.rot-header.sb{border-left:3px solid var(--strength-b);}
+.rot-header-left{display:flex;align-items:center;gap:8px;}
+.rot-badge{font-size:10px;font-family:'DM Mono',monospace;padding:2px 8px;border-radius:4px;font-weight:500;}
+.rot-badge.sa{background:#0e2a2a;border:1px solid rgba(42,184,168,.5);color:#90f0e0;}
+.rot-badge.sb{background:var(--strength);border:1px solid rgba(240,120,40,.5);color:var(--strength-t);}
+.rot-header-name{font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;}
+.rot-chevron{font-size:10px;color:var(--text3);transition:transform .2s;}
+.rot-chevron.open{transform:rotate(180deg);}
+.rot-body{display:none;padding:12px;background:var(--bg3);border-top:1px solid var(--border);}
+.rot-body.open{display:block;}
+.rot-section-title{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;margin-top:10px;}
+.rot-section-title:first-child{margin-top:0;}
+.rot-item{font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;padding:3px 0;display:flex;align-items:baseline;gap:6px;}
+.rot-item::before{content:'·';color:var(--text3);flex-shrink:0;}
+.rot-finish{font-size:11px;font-family:'DM Mono',monospace;font-weight:500;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
+.rot-finish.sa{color:#90f0e0;}
+.rot-finish.sb{color:var(--strength-t);}
+.rot-week{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:52px;}
+.rot-label{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:.04em;}
+.rot-pill{font-size:10px;font-family:'DM Mono',monospace;padding:3px 8px;border-radius:4px;font-weight:500;}
+.rot-pill.a{background:#0e2a2a;border:1px solid rgba(42,200,180,.5);color:#90f0e0;}
+.rot-pill.b{background:var(--strength);border:1px solid rgba(240,120,40,.5);color:var(--strength-t);}
 .forecast-bar{margin-top:1.25rem;background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:1rem 1.25rem;}
 .forecast-bar h3{font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
 .forecast-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
@@ -165,12 +208,14 @@ header{display:flex;align-items:flex-end;justify-content:space-between;margin-bo
 .stat-val.warn{color:var(--accent2);}
 
 .appt-list{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
-.appt-item{display:flex;align-items:center;gap:6px;background:var(--bg3);border-radius:6px;padding:6px 8px;border:1px solid rgba(224,80,80,.25);}
+.appt-item{display:flex;flex-direction:column;background:var(--bg3);border-radius:6px;border:1px solid rgba(224,80,80,.25);overflow:hidden;}
+.appt-item-row{display:flex;align-items:center;gap:6px;padding:6px 8px;}
 .appt-item .appt-day{font-size:10px;color:var(--appt-t);min-width:28px;font-weight:500;}
 .appt-item .appt-time{font-size:10px;color:var(--text3);min-width:44px;}
 .appt-item .appt-desc{font-size:11px;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .appt-item .appt-del{background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:0 2px;line-height:1;transition:color .15s;flex-shrink:0;}
 .appt-item .appt-del:hover{color:var(--appt-b);}
+.appt-notes-text{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;padding:4px 8px 6px;border-top:1px solid rgba(224,80,80,.1);margin-top:2px;line-height:1.5;}
 .appt-add-row{display:grid;grid-template-columns:80px 70px 1fr auto;gap:5px;align-items:center;}
 .appt-add-row select,.appt-add-row input{background:var(--bg3);border:1px solid var(--border2);border-radius:5px;color:var(--text2);font-family:'DM Mono',monospace;font-size:11px;padding:5px 7px;outline:none;transition:border-color .15s;width:100%;}
 .appt-add-row select{-webkit-appearance:none;cursor:pointer;}
@@ -243,6 +288,11 @@ header{display:flex;align-items:flex-end;justify-content:space-between;margin-bo
 
 <div class="horizon"></div>
 
+<div class="rotation-bar">
+  <div class="rotation-title">Weekly workout routines <span id="circuit-label" style="font-size:10px;color:var(--text3);text-transform:none;letter-spacing:0;font-family:'DM Mono',monospace;font-weight:400;margin-left:8px;"></span></div>
+  <div class="rotation-row" id="rotation-row"></div>
+</div>
+
 <div class="forecast-bar">
   <h3>Surf forecast</h3>
   <div class="forecast-days" id="forecast-days"></div>
@@ -259,6 +309,7 @@ header{display:flex;align-items:flex-end;justify-content:space-between;margin-bo
       <input type="text" id="appt-desc" placeholder="e.g. Dr. Smith checkup">
       <button class="appt-add-btn" id="appt-add-btn">+ add</button>
     </div>
+    <input type="text" id="appt-notes" placeholder="notes for this appointment (optional)" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:5px;color:var(--text2);font-family:'DM Mono',monospace;font-size:11px;padding:5px 7px;outline:none;margin-top:5px;box-sizing:border-box;transition:border-color .15s;" onfocus="this.style.borderColor='rgba(224,80,80,.5)'" onblur="this.style.borderColor=''">
     <div style="margin-top:10px;">
       <textarea class="notes-textarea" id="notes-area" placeholder="general notes, surf links, gym hours..."></textarea>
     </div>
@@ -275,7 +326,7 @@ const SURF_STARTS=['5 AM','6 AM','7 AM','8 AM','9 AM','10 AM','11 AM','12 PM'];
 const CLIMB_TIMES=['6 AM','7 AM','8 AM','9 AM','10 AM','11 AM','12 PM','1 PM','2 PM','3 PM','4 PM','5 PM','6 PM','7 PM','8 PM','9 PM'];
 
 let workDays=[true,true,true,true,false,false,false];
-let workoutType=['pilates','pilates','strength','strength',null,null,null];
+let workoutType=['pilates','pilates','strength-a','strength-b',null,null,null];
 let offWorkout=[null,null,null,null,'none','none','none'];
 let yogaDays=Array(7).fill(false);
 let yogaTime=Array(7).fill('7 AM');
@@ -293,7 +344,8 @@ const isSurfable=i=>surfFcast[i]==='good'||surfFcast[i]==='ok';
 function hoursFrom(start,count){const idx=HI[start];if(idx===undefined)return[];return HOURS.slice(idx,Math.min(idx+count,HOURS.length));}
 function timeToHour(t){const[h,m]=t.split(':').map(Number);const total=h*60+m;let best=HOURS[0],bestD=Infinity;HOURS.forEach(hr=>{const[hh]=parseHr(hr);const d=Math.abs(hh*60-total);if(d<bestD){bestD=d;best=hr;}});return best;}
 function parseHr(hr){const[t,ap]=hr.split(' ');let h=parseInt(t);if(ap==='PM'&&h!==12)h+=12;if(ap==='AM'&&h===12)h=0;return[h,0];}
-function countWk(){let n=0;DAYS.forEach((_,i)=>{if(workDays[i]){if(workoutType[i]==='pilates'||workoutType[i]==='strength')n++;}else{if(offWorkout[i]==='pilates'||offWorkout[i]==='strength')n++;}});return n;}
+function isStrength(v){return v==='strength-a'||v==='strength-b';}
+function countWk(){let n=0;DAYS.forEach((_,i)=>{if(workDays[i]){if(workoutType[i]==='pilates'||isStrength(workoutType[i]))n++;}else{if(offWorkout[i]==='pilates'||isStrength(offWorkout[i]))n++;}});return n;}
 
 function workSched(d){
   const wt=workoutType[d],hasYoga=yogaDays[d],hasClimb=climbDays[d],hasPreSurf=surfWorkDay[d]&&isSurfable(d);
@@ -304,7 +356,7 @@ function workSched(d){
   if(hasClimb){const ct=(climbTime[d]&&HI[climbTime[d]]>=HI['7 PM'])?climbTime[d]:'7 PM';s[ct]={cls:'climb',lb:'🧗'};const nx=HOURS[HI[ct]+1];if(nx)s[nx]={cls:'climb',lb:'🧗'};}
   else if(hasYoga){const yt=(HI[yogaTime[d]]>=HI['6 PM'])?yogaTime[d]:'6 PM';s[yt]={cls:'yoga',lb:'🧘'};const nx=HOURS[HI[yt]+1];if(nx)s[nx]={cls:'free',lb:''};s['8 PM']={cls:'free',lb:''};}
   else if(wt==='pilates'){s['6 PM']={cls:'pilates',lb:'🤸'};s['7 PM']={cls:'pilates run',lb:'🏃'};}
-  else if(wt==='strength'){s['6 PM']={cls:'strength',lb:'🏋️'};s['7 PM']={cls:'strength run',lb:'🏃'};}
+  else if(isStrength(wt)){const sc=wt==='strength-a'?'strength-a':'strength-b';s['6 PM']={cls:sc,lb:'🏋️'};s['7 PM']={cls:sc+' run',lb:'🏃'};}
   else{s['6 PM']={cls:'free',lb:''};s['7 PM']={cls:'free',lb:''};s['8 PM']={cls:'free',lb:''};}
   return s;
 }
@@ -317,7 +369,7 @@ function offSched(d){
   if(hasYoga){const yt=yogaTime[d]||'9 AM';s[yt]={cls:'yoga',lb:'🧘'};}
   if(hasClimb){const cs=climbTime[d]||'10 AM';s[cs]={cls:'climb',lb:'🧗'};const nx=HOURS[HI[cs]+1];if(nx)s[nx]={cls:'climb',lb:'🧗'};}
   if(ow==='pilates'){s['9 AM']={cls:'pilates',lb:'🤸'};s['10 AM']={cls:'pilates run',lb:'🏃'};}
-  else if(ow==='strength'){s['9 AM']={cls:'strength',lb:'🏋️'};s['10 AM']={cls:'strength run',lb:'🏃'};}
+  else if(isStrength(ow)){const sc=ow==='strength-a'?'strength-a':'strength-b';s['9 AM']={cls:sc,lb:'🏋️'};s['10 AM']={cls:sc+' run',lb:'🏃'};}
   appointments.filter(a=>a.day===d).forEach(a=>{s[timeToHour(a.time)]={cls:'appt',lb:'❗'};});
   return s;
 }
@@ -327,7 +379,7 @@ function buildHeader(){document.getElementById('week-label').textContent=getWeek
 function buildSummary(){
   const row=document.getElementById('summary-row');row.innerHTML='';
   const wc=workDays.filter(Boolean).length;let pC=0,sC=0;
-  DAYS.forEach((_,i)=>{if(workDays[i]){if(yogaDays[i]||climbDays[i])return;if(workoutType[i]==='pilates')pC++;if(workoutType[i]==='strength')sC++;}else{if(offWorkout[i]==='pilates')pC++;if(offWorkout[i]==='strength')sC++;}});
+  DAYS.forEach((_,i)=>{if(workDays[i]){if(yogaDays[i]||climbDays[i])return;if(workoutType[i]==='pilates')pC++;if(isStrength(workoutType[i]))sC++;}else{if(offWorkout[i]==='pilates')pC++;if(isStrength(offWorkout[i]))sC++;}});
   const yC=yogaDays.filter(Boolean).length,cC=climbDays.filter(Boolean).length,sfC=surfDays.filter(Boolean).length+surfWorkDay.filter(Boolean).length;
   const wL=pC>0&&sC>0?`pilates ${pC}× · strength ${sC}×`:pC>0?`pilates · ${pC}×`:sC>0?`strength · ${sC}×`:'no workout';
   [{cls:'work-pill',pip:'var(--work-b)',lb:`${wc} work days · ${wc*10}h`},{cls:'workout-pill',pip:'var(--pilates-b)',lb:wL},{cls:'yoga-pill',pip:'var(--yoga-b)',lb:`hot yoga · ${yC}×`},{cls:'climb-pill',pip:'var(--climb-b)',lb:`climbing · ${cC}×`},{cls:'surf-pill',pip:'var(--surf-b)',lb:`surf · ${sfC}×`}].forEach(p=>{const el=document.createElement('div');el.className='pill '+p.cls;el.innerHTML=`<div style="width:6px;height:6px;border-radius:50%;background:${p.pip};flex-shrink:0"></div>${p.lb}`;row.appendChild(el);});
@@ -360,8 +412,39 @@ function buildGrid(){
   const scheds=DAYS.map((_,i)=>workDays[i]?workSched(i):offSched(i));
   HOURS.forEach(h=>{
     const tl=document.createElement('div');tl.className='time-lbl';tl.textContent=h;grid.appendChild(tl);
-    DAYS.forEach((_,i)=>{const s=scheds[i][h]||{cls:'free',lb:''};const cell=document.createElement('div');cell.className='cell '+s.cls;if(s.lb)cell.textContent=s.lb;grid.appendChild(cell);});
+    DAYS.forEach((_,i)=>{
+      const s=scheds[i][h]||{cls:'free',lb:''};
+      const cell=document.createElement('div');cell.className='cell '+s.cls;
+      if(s.lb)cell.textContent=s.lb;
+      // appt cells get a tap-to-show bubble
+      if(s.cls==='appt'){
+        const appt=appointments.find(a=>a.day===i&&timeToHour(a.time)===h);
+        if(appt){
+          cell.addEventListener('click',e=>{
+            e.stopPropagation();
+            const existing=document.querySelector('.appt-bubble');
+            if(existing&&existing.dataset.key===`${i}-${h}`){existing.remove();return;}
+            document.querySelectorAll('.appt-bubble').forEach(b=>b.remove());
+            const bubble=document.createElement('div');bubble.className='appt-bubble';bubble.dataset.key=`${i}-${h}`;
+            const[hh,mm]=appt.time.split(':');const hNum=parseInt(hh),ampm=hNum>=12?'PM':'AM',h12=hNum%12||12;
+            bubble.innerHTML=`<div class="appt-bubble-title">❗ ${appt.desc}</div><div class="appt-bubble-time">${DAYS[appt.day]} · ${h12}:${mm} ${ampm}</div>${appt.notes?`<div class="appt-bubble-notes">${appt.notes}</div>`:''}`;
+            document.body.appendChild(bubble);
+            const r=cell.getBoundingClientRect();
+            const bw=200;
+            let left=r.left+r.width/2-bw/2;
+            if(left<8)left=8;
+            if(left+bw>window.innerWidth-8)left=window.innerWidth-bw-8;
+            bubble.style.left=left+'px';
+            bubble.style.top=(r.top-bubble.offsetHeight-10+window.scrollY)+'px';
+          });
+        }
+      }
+      grid.appendChild(cell);
+    });
   });
+
+  // tap anywhere else to close bubble
+  document.addEventListener('click',()=>{document.querySelectorAll('.appt-bubble').forEach(b=>b.remove());},{once:false});
 }
 
 function buildActPanel(){
@@ -373,15 +456,41 @@ function buildActPanel(){
     if(workDays[i]){
       const wt=workoutType[i];
       if(wt==='pilates'){cell.className='wk-cell pilates-mode';cell.textContent='P';}
-      else if(wt==='strength'){cell.className='wk-cell strength-mode';cell.textContent='S';}
+      else if(isStrength(wt)){
+        cell.className='wk-cell '+(wt==='strength-a'?'strength-a-mode':'strength-b-mode');
+        cell.style.cssText+='display:flex;flex-direction:column;gap:2px;';
+        const lbl=document.createElement('div');lbl.style.cssText='font-size:10px;line-height:1;font-family:\'DM Mono\',monospace;';lbl.textContent=wt==='strength-a'?'S·A':'S·B';
+        const sel=document.createElement('select');
+        const sc=wt==='strength-a'?'rgba(42,184,168,.3)':'rgba(240,120,40,.3)';
+        const tc=wt==='strength-a'?'#90f0e0':'var(--strength-t)';
+        sel.style.cssText=`background:#0a0d14;border:1px solid ${sc};border-radius:3px;color:${tc};font-family:'DM Mono',monospace;font-size:9px;cursor:pointer;outline:none;-webkit-appearance:none;text-align:center;padding:1px 2px;width:100%;max-width:52px;`;
+        [['strength-a','S-A (upper)'],['strength-b','S-B (lower)']].forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o.textContent=t;if(v===wt)o.selected=true;sel.appendChild(o);});
+        sel.addEventListener('change',e=>{e.stopPropagation();workoutType[i]=e.target.value;save();render();});
+        sel.addEventListener('click',e=>e.stopPropagation());
+        cell.appendChild(lbl);cell.appendChild(sel);
+        cell.addEventListener('click',()=>{if(isStrength(workoutType[i])){workoutType[i]='none';save();render();}});
+      }
       else{const atCap=countWk()>=4;cell.className='wk-cell inactive';cell.style.cursor=atCap?'not-allowed':'pointer';cell.style.opacity='0.5';cell.textContent=atCap?'–':'+';}
-      cell.addEventListener('click',()=>{const cur=workoutType[i],next=cur==='pilates'?'strength':cur==='strength'?'none':'pilates';if(next!=='none'&&cur==='none'&&countWk()>=4)return;workoutType[i]=next;save();render();});
+      if(wt!=='strength-a'&&wt!=='strength-b') cell.addEventListener('click',()=>{const cur=workoutType[i],next=cur==='pilates'?'strength-a':cur==='none'?'pilates':'none';if(next!=='none'&&cur==='none'&&countWk()>=4)return;workoutType[i]=next;save();render();});
     }else{
       const ow=offWorkout[i];
       if(ow==='pilates'){cell.className='wk-cell pilates-mode';cell.textContent='P';}
-      else if(ow==='strength'){cell.className='wk-cell strength-mode';cell.textContent='S';}
+      else if(isStrength(ow)){
+        cell.className='wk-cell '+(ow==='strength-a'?'strength-a-mode':'strength-b-mode');
+        cell.style.cssText+='display:flex;flex-direction:column;gap:2px;';
+        const lbl=document.createElement('div');lbl.style.cssText='font-size:10px;line-height:1;font-family:\'DM Mono\',monospace;';lbl.textContent=ow==='strength-a'?'S·A':'S·B';
+        const sel=document.createElement('select');
+        const sc=ow==='strength-a'?'rgba(42,184,168,.3)':'rgba(240,120,40,.3)';
+        const tc=ow==='strength-a'?'#90f0e0':'var(--strength-t)';
+        sel.style.cssText=`background:#0a0d14;border:1px solid ${sc};border-radius:3px;color:${tc};font-family:'DM Mono',monospace;font-size:9px;cursor:pointer;outline:none;-webkit-appearance:none;text-align:center;padding:1px 2px;width:100%;max-width:52px;`;
+        [['strength-a','S-A (upper)'],['strength-b','S-B (lower)']].forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o.textContent=t;if(v===ow)o.selected=true;sel.appendChild(o);});
+        sel.addEventListener('change',e=>{e.stopPropagation();offWorkout[i]=e.target.value;save();render();});
+        sel.addEventListener('click',e=>e.stopPropagation());
+        cell.appendChild(lbl);cell.appendChild(sel);
+        cell.addEventListener('click',()=>{if(isStrength(offWorkout[i])){offWorkout[i]='none';save();render();}});
+      }
       else{const atCap=countWk()>=4;cell.className='wk-cell inactive';cell.style.cursor=atCap?'not-allowed':'pointer';cell.style.opacity='0.4';cell.textContent=atCap?'–':'+';}
-      cell.addEventListener('click',()=>{const cur=offWorkout[i],next=cur==='none'?'pilates':cur==='pilates'?'strength':'none';if(next!=='none'&&cur==='none'&&countWk()>=4)return;offWorkout[i]=next;save();render();});
+      if(!isStrength(ow)) cell.addEventListener('click',()=>{const cur=offWorkout[i],next=cur==='none'?'pilates':cur==='pilates'?'strength-a':'none';if(next!=='none'&&cur==='none'&&countWk()>=4)return;offWorkout[i]=next;save();render();});
     }
     grid.appendChild(cell);
   });
@@ -446,7 +555,7 @@ function buildActPanel(){
         const lbl=document.createElement('div');lbl.className='sc-label';lbl.textContent='🤙 ✕';
         cell.style.cursor='pointer';cell.addEventListener('click',()=>{surfWorkDay[i]=false;save();render();});
         cell.appendChild(lbl);
-      }else{cell.className='surf-cell';cell.textContent='+ early';cell.addEventListener('click',()=>{surfWorkDay[i]=true;save();render();});}
+      }else{cell.className='surf-cell';cell.innerHTML='+'+'<br>'+'early';cell.addEventListener('click',()=>{surfWorkDay[i]=true;save();render();});}
     }else if(!surfable){cell.className='surf-cell surf-locked';cell.textContent='–';}
     else if(!isOn&&totalSurf>=2){cell.className='surf-cell surf-locked';cell.textContent='–';}
     else if(isOn){
@@ -466,6 +575,96 @@ function buildActPanel(){
 function addL(p,t){const l=document.createElement('div');l.className='act-lbl';l.textContent=t;p.appendChild(l);}
 function addGap(p){const g=document.createElement('div');g.className='opt-gap';p.appendChild(g);}
 
+function buildRotation(){
+  const row=document.getElementById('rotation-row');
+  row.innerHTML='';
+
+  // Determine which circuit rotation (every 2 weeks)
+  const now=new Date(),d=now.getDay(),diff=now.getDate()-d+(d===0?-6:1);
+  const mon=new Date(now);mon.setDate(diff+weekOff*7);
+  const startOfYear=new Date(mon.getFullYear(),0,1);
+  const weekNum=Math.floor((mon-startOfYear)/(7*24*60*60*1000));
+  const rotation=Math.floor(weekNum/2)%2; // 0 or 1, switches every 2 weeks
+
+  const workouts=[
+    {
+      id:'sa', badge:'S·A', name:'Upper body', cls:'sa',
+      pre:['Pull ups: 4 / 3 / 3 / 2  (60s rest)','Abs: Criss-cross — 3×20','Abs: Hollow hold — 3×30s'],
+      circuit: rotation===0 ? [
+        'Push ups — 15 reps',
+        'Shoulder press — 12 reps',
+        'Chest press — 12 reps',
+        'Bent over row — 10 each side',
+        'Tricep dips — 15 reps',
+        'Bicep curl — 12 reps',
+      ] : [
+        'Pike push ups — 12 reps',
+        'Arnold press — 10 reps',
+        'Incline push ups — 15 reps',
+        'Single arm row — 12 each side',
+        'Skull crushers — 12 reps',
+        'Hammer curl — 12 reps',
+      ],
+    },
+    {
+      id:'sb', badge:'S·B', name:'Lower body', cls:'sb',
+      pre:['Pull ups: 4 / 3 / 3 / 2  (60s rest)','Abs: Dead bug — 3×10 each side','Abs: Plank hip dip — 3×15'],
+      circuit: rotation===0 ? [
+        'Goblet squat — 12 reps',
+        'Romanian deadlift — 12 reps',
+        'Lateral lunge — 10 each side',
+        'Glute bridge — 15 reps',
+        'Step up — 10 each side',
+        'Dumbbell row — 10 each side',
+      ] : [
+        'Sumo squat — 12 reps',
+        'Single leg deadlift — 10 each side',
+        'Curtsy lunge — 10 each side',
+        'Hip thrust — 15 reps',
+        'Reverse lunge — 10 each side',
+        'Bulgarian split squat — 8 each side',
+      ],
+    },
+  ];
+
+  const lbl=document.getElementById('circuit-label');
+  if(lbl)lbl.textContent=`· circuit ${rotation===0?'1':'2'} of 2`;
+
+  workouts.forEach(w=>{
+    const section=document.createElement('div');section.className='rot-section';
+
+    const header=document.createElement('div');header.className=`rot-header ${w.cls}`;
+    const left=document.createElement('div');left.className='rot-header-left';
+    const badge=document.createElement('div');badge.className=`rot-badge ${w.cls}`;badge.textContent=w.badge;
+    const name=document.createElement('div');name.className='rot-header-name';name.textContent=w.name;
+    left.appendChild(badge);left.appendChild(name);
+    const chev=document.createElement('div');chev.className='rot-chevron';chev.textContent='▼';
+    header.appendChild(left);header.appendChild(chev);
+
+    const body=document.createElement('div');body.className='rot-body';
+
+    // pre-workout
+    const pt=document.createElement('div');pt.className='rot-section-title';pt.textContent='Pre-workout';body.appendChild(pt);
+    w.pre.forEach(item=>{const el=document.createElement('div');el.className='rot-item';el.textContent=item;body.appendChild(el);});
+
+    // circuit
+    const ct=document.createElement('div');ct.className='rot-section-title';ct.textContent='Circuit × 2 rounds';body.appendChild(ct);
+    w.circuit.forEach(item=>{const el=document.createElement('div');el.className='rot-item';el.textContent=item;body.appendChild(el);});
+
+    // finish
+    const fin=document.createElement('div');fin.className=`rot-finish ${w.cls}`;fin.textContent='→ 10 min run';body.appendChild(fin);
+
+    header.addEventListener('click',()=>{
+      const isOpen=body.classList.contains('open');
+      body.classList.toggle('open');
+      chev.classList.toggle('open');
+    });
+
+    section.appendChild(header);section.appendChild(body);
+    row.appendChild(section);
+  });
+}
+
 function buildForecast(){
   const c=document.getElementById('forecast-days');c.innerHTML='';
   const INFO={good:{wave:'🌊',size:'3–4 ft',tag:'pumping · ≤3kt',cls:'surfable'},ok:{wave:'〰',size:'2–3 ft',tag:'fair to good',cls:'surfable ok-surf'},poor:{wave:'—',size:'flat / blown',tag:'no go',cls:'flat'}};
@@ -481,7 +680,7 @@ function buildForecast(){
 function buildStats(){
   const el=document.getElementById('stats');el.innerHTML='';
   const wc=workDays.filter(Boolean).length;let pilates=0,strength=0;
-  DAYS.forEach((_,i)=>{if(workDays[i]){if(yogaDays[i]||climbDays[i])return;if(workoutType[i]==='pilates')pilates++;if(workoutType[i]==='strength')strength++;}else{if(offWorkout[i]==='pilates')pilates++;if(offWorkout[i]==='strength')strength++;}});
+  DAYS.forEach((_,i)=>{if(workDays[i]){if(yogaDays[i]||climbDays[i])return;if(workoutType[i]==='pilates')pilates++;if(isStrength(workoutType[i]))strength++;}else{if(offWorkout[i]==='pilates')pilates++;if(isStrength(offWorkout[i]))strength++;}});
   const totalWk=pilates+strength,yoga=yogaDays.filter(Boolean).length;
   const climbW=DAYS.filter((_,i)=>workDays[i]&&climbDays[i]).length;
   const climbO=DAYS.filter((_,i)=>!workDays[i]&&climbDays[i]).length;
@@ -497,9 +696,12 @@ function buildAppointments(){
   if(appointments.length===0){const e=document.createElement('div');e.style.cssText='font-size:11px;color:var(--text3);padding:4px 0;';e.textContent='no appointments yet';list.appendChild(e);}
   else appointments.forEach((a,idx)=>{
     const item=document.createElement('div');item.className='appt-item';
+    const row=document.createElement('div');row.className='appt-item-row';
     const[hh,mm]=a.time.split(':');const h=parseInt(hh),ampm=h>=12?'PM':'AM',h12=h%12||12;
-    item.innerHTML=`<span class="appt-day">${DAYS[a.day]}</span><span class="appt-time">${h12}:${mm} ${ampm}</span><span class="appt-desc" title="${a.desc}">${a.desc}</span><button class="appt-del" data-idx="${idx}">&#x2715;</button>`;
-    item.querySelector('.appt-del').addEventListener('click',()=>{appointments.splice(idx,1);save();buildAppointments();buildGrid();buildStats();});
+    row.innerHTML=`<span class="appt-day">${DAYS[a.day]}</span><span class="appt-time">${h12}:${mm} ${ampm}</span><span class="appt-desc" title="${a.desc}">${a.desc}</span><button class="appt-del" data-idx="${idx}">&#x2715;</button>`;
+    row.querySelector('.appt-del').addEventListener('click',()=>{appointments.splice(idx,1);save();buildAppointments();buildGrid();buildStats();});
+    item.appendChild(row);
+    if(a.notes){const n=document.createElement('div');n.className='appt-notes-text';n.textContent=a.notes;item.appendChild(n);}
     list.appendChild(item);
   });
 }
@@ -520,7 +722,7 @@ function getWeekKey(off){
 function defaultState(){
   return {
     workDays:[true,true,true,true,false,false,false],
-    workoutType:['pilates','pilates','strength','strength',null,null,null],
+    workoutType:['pilates','pilates','strength-a','strength-b',null,null,null],
     offWorkout:[null,null,null,null,'none','none','none'],
     yogaDays:Array(7).fill(false),yogaTime:Array(7).fill('7 AM'),
     climbDays:Array(7).fill(false),climbTime:Array(7).fill('10 AM'),
@@ -563,7 +765,7 @@ function loadWeek(off){
   }
 }
 
-function render(){buildHeader();buildSummary();buildDayControls();buildGrid();buildActPanel();buildForecast();buildStats();buildAppointments();document.getElementById('notes-area').value=notes;}
+function render(){buildHeader();buildSummary();buildDayControls();buildGrid();buildActPanel();buildRotation();buildForecast();buildStats();buildAppointments();document.getElementById('notes-area').value=notes;}
 
 document.getElementById('prev-week').addEventListener('click',()=>{weekOff--;loadWeek(weekOff);render();});
 document.getElementById('next-week').addEventListener('click',()=>{weekOff++;loadWeek(weekOff);render();});
@@ -575,9 +777,9 @@ document.getElementById('reset-btn').addEventListener('click',()=>{
   appointments=[];notes='';save();render();
 });
 document.getElementById('appt-add-btn').addEventListener('click',()=>{
-  const day=+document.getElementById('appt-day').value,time=document.getElementById('appt-time').value,desc=document.getElementById('appt-desc').value.trim();
-  if(!desc)return;appointments.push({day,time,desc});appointments.sort((a,b)=>a.day-b.day||a.time.localeCompare(b.time));
-  document.getElementById('appt-desc').value='';save();buildAppointments();buildGrid();buildStats();
+  const day=+document.getElementById('appt-day').value,time=document.getElementById('appt-time').value,desc=document.getElementById('appt-desc').value.trim(),apptNotes=document.getElementById('appt-notes').value.trim();
+  if(!desc)return;appointments.push({day,time,desc,notes:apptNotes});appointments.sort((a,b)=>a.day-b.day||a.time.localeCompare(b.time));
+  document.getElementById('appt-desc').value='';document.getElementById('appt-notes').value='';save();buildAppointments();buildGrid();buildStats();
 });
 document.getElementById('notes-area').addEventListener('input',e=>{notes=e.target.value;save();});
 loadWeek(weekOff);render();
