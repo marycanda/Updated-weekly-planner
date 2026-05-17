@@ -6,795 +6,1264 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Week Plan">
-<meta name="theme-color" content="#c68642">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23c68642'/%3E%3Ctext x='90' y='115' font-size='90' text-anchor='middle' font-family='system-ui'%3E📅%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#12100e">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%2312100e'/%3E%3Ctext x='90' y='115' font-size='90' text-anchor='middle'%3E🗓%3C/text%3E%3C/svg%3E">
 <title>Week Plan</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#12100e;--bg3:#1e1a16;--surface:#252018;--surface2:#2e2720;
-  --border:rgba(255,220,180,0.08);--border2:rgba(255,220,180,0.16);
-  --text:#f0e8dc;--text2:#a89880;--text3:#6b5a47;
-  --work:#1a2a1e;--work-b:#5aac6e;--work-t:#a8e0b4;
-  --pilates:#2a1a3e;--pilates-b:#b87ef0;--pilates-t:#e8d0ff;
-  --strength:#2e1800;--strength-b-bg:#0e2a2a;
-  --strength-b:#f07828;--strength-t:#ffd4a8;
-  --strength-a-b:#2ab8a8;--strength-a-t:#90f0e0;
-  --run:#1e1a0a;--run-b:#c8a832;--run-t:#f0e090;
-  --yoga:#2a2200;--yoga-b:#e8c832;--yoga-t:#fff0a0;
-  --climb:#2a1a08;--climb-b:#c87a20;--climb-t:#f0c080;
-  --surf:#0e1e2a;--surf-b:#3a9ec8;--surf-t:#a0d8f0;
-  --appt:#2e0e0e;--appt-b:#e05050;--appt-t:#fac0c0;
-  --sleep:#100e0c;--sleep-t:#3a2e24;
-  --commute:#1a1610;--commute-t:#5a4a38;
-  --free-t:#4a3828;
-  --accent:#e8673a;--accent2:#d4882a;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;}
-body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.4;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");}
-.app{position:relative;z-index:1;max-width:1140px;margin:0 auto;padding:env(safe-area-inset-top, 1rem) max(1.25rem, env(safe-area-inset-right)) 5rem max(1.25rem, env(safe-area-inset-left));}
+/* ── Tokens ──────────────────────────────────────────── */
+:root {
+  --bg:       #12100e;
+  --bg2:      #1e1a16;
+  --surface:  #252018;
+  --surface2: #2e2720;
+  --border:   rgba(255,220,180,.08);
+  --border2:  rgba(255,220,180,.16);
+  --text:     #f0e8dc;
+  --text2:    #a89880;
+  --text3:    #6b5a47;
+  --accent:   #e8673a;
 
+  /* activity colors */
+  --work-bg:  #1a2e28; --work:   #4ecdc4; --work-t:  #c0f0ec;
+  --pil-bg:   #2a1a3e; --pil:    #b87ef0; --pil-t:   #e8d0ff;
+  --sa-bg:    #0e2a2a; --sa:     #2ab8a8; --sa-t:    #90f0e0;
+  --sb-bg:    #2e0e18; --sb:     #d4456a; --sb-t:    #ffb0c8;
+  --yoga-bg:  #2a2200; --yoga:   #e8c832; --yoga-t:  #fff0a0;
+  --climb-bg: #1a1a2e; --climb:  #9b7fe8; --climb-t: #d4c0ff;
+  --surf-bg:  #0e1e2a; --surf:   #3a9ec8; --surf-t:  #a0d8f0;
+  --appt-bg:  #2e0e0e; --appt:   #e05050; --appt-t:  #fac0c0;
+  --sleep-bg: #100e0c; --sleep-t:#3a2e24;
+  --run-bg:   #1e1a0a; --run-t:  #f0e090;
+}
+
+/* ── Reset ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+button { cursor: pointer; font-family: inherit; }
+select { font-family: inherit; cursor: pointer; }
+input  { font-family: inherit; }
+
+/* ── Layout ──────────────────────────────────────────── */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  min-height: 100vh;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0; opacity: .4;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+.app {
+  position: relative; z-index: 1;
+  max-width: 1140px; margin: 0 auto;
+  padding: env(safe-area-inset-top,1rem) max(1.25rem,env(safe-area-inset-right)) 5rem max(1.25rem,env(safe-area-inset-left));
+}
+
+/* ── Header ──────────────────────────────────────────── */
+header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+  margin-bottom: 1.5rem; padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border2);
+}
+.header-left h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.5rem, 4vw, 2.4rem);
+  font-weight: 700; letter-spacing: -.03em; line-height: 1;
+}
+.header-left h1 span { color: var(--accent); }
+.header-left .sub { font-size: 11px; color: var(--text3); margin-top: 5px; letter-spacing: .08em; text-transform: uppercase; }
+.week-nav { display: flex; align-items: center; gap: 10px; }
+.week-nav button {
+  width: 30px; height: 30px;
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 50%; color: var(--text2); font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.week-nav button:hover { background: var(--surface2); color: var(--text); }
+.week-label {
+  font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 600;
+  color: var(--text2); min-width: 150px; text-align: center;
+}
+
+/* ── Legend ──────────────────────────────────────────── */
+.legend {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  align-items: center; margin-bottom: 1rem;
+}
+.leg-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text3); }
+.leg-dot  { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.reset-btn {
+  margin-left: auto; padding: 4px 12px;
+  background: transparent; border: 1px solid var(--border2);
+  border-radius: 6px; color: var(--text3); font-size: 11px;
+  transition: all .15s;
+}
+.reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── Day controls ────────────────────────────────────── */
+.day-controls {
+  display: grid;
+  grid-template-columns: 54px repeat(7, minmax(0,1fr));
+  gap: 3px; margin-bottom: 3px;
+}
+.day-head {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 4px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  transition: background .2s;
+}
+.day-head.is-work { background: rgba(26,46,40,.7); border-color: rgba(78,205,196,.3); }
+.day-name {
+  font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 600;
+  color: var(--text2); letter-spacing: .07em; text-transform: uppercase;
+}
+.day-head.is-work .day-name { color: var(--work-t); }
+.day-date { font-size: 10px; color: var(--text3); letter-spacing: .03em; }
+.toggle {
+  width: 30px; height: 16px; border-radius: 8px;
+  border: 1px solid var(--border2); background: var(--bg2);
+  position: relative; transition: background .2s, border-color .2s; flex-shrink: 0;
+}
+.toggle.on { background: var(--work); border-color: var(--work); }
+.toggle::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: rgba(255,255,255,.45); transition: transform .2s, background .2s;
+}
+.toggle.on::after { transform: translateX(14px); background: white; }
+.day-badge { font-size: 9px; letter-spacing: .05em; text-transform: uppercase; padding: 2px 5px; border-radius: 3px; }
+.day-badge.work { background: rgba(78,205,196,.15); color: var(--work); }
+.day-badge.off  { background: var(--bg2); color: var(--text3); }
+
+/* ── Planner grid ────────────────────────────────────── */
+.planner-grid {
+  display: grid;
+  grid-template-columns: 54px repeat(7, minmax(0,1fr));
+  gap: 3px;
+}
+.time-lbl {
+  display: flex; align-items: flex-start; justify-content: flex-end;
+  padding-right: 7px; padding-top: 3px;
+  font-size: 10px; color: var(--text3); height: 36px; letter-spacing: .03em;
+}
+.cell {
+  height: 36px; border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; text-align: center; line-height: 1.2;
+  padding: 2px 3px; border: 1px solid transparent;
+  transition: filter .15s; letter-spacing: .02em; overflow: hidden;
+}
+.cell:hover { filter: brightness(1.18); }
+.cell.free     { background: transparent;    border-color: var(--border);             color: #4a3828; }
+.cell.sleep    { background: var(--sleep-bg);                                          color: var(--sleep-t); }
+.cell.commute  { background: #1a1610;        border-color: rgba(255,220,180,.04);     color: #5a4a38; }
+.cell.work     { background: var(--work-bg); border-color: rgba(78,205,196,.3);       color: var(--work-t); }
+.cell.pilates  { background: var(--pil-bg);  border-color: rgba(184,126,240,.45);     color: var(--pil-t); }
+.cell.strength-a { background: var(--sa-bg); border-color: rgba(42,184,168,.45);      color: var(--sa-t); }
+.cell.strength-b { background: var(--sb-bg); border-color: rgba(212,69,106,.45);      color: var(--sb-t); }
+.cell.yoga     { background: var(--yoga-bg); border-color: rgba(232,200,50,.45);      color: var(--yoga-t); }
+.cell.climb    { background: var(--climb-bg);border-color: rgba(155,127,232,.45);     color: var(--climb-t); }
+.cell.surf     { background: var(--surf-bg); border-color: rgba(58,158,200,.4);       color: var(--surf-t); }
+.cell.appt     { background: var(--appt-bg); border-color: rgba(224,80,80,.45);       color: var(--appt-t); cursor: pointer; }
+.cell.pilates.run   { background: var(--pil-bg);  border-color: rgba(184,126,240,.6); color: var(--pil-t);  opacity: .85; }
+.cell.strength-a.run{ background: var(--sa-bg);   border-color: rgba(42,184,168,.6);  color: var(--sa-t);   opacity: .85; }
+.cell.strength-b.run{ background: var(--sb-bg);   border-color: rgba(212,69,106,.6);  color: var(--sb-t);   opacity: .85; }
+
+/* ── Popup boxes (appt + work edit + cell picker) ─────── */
+.popup-box {
+  position: fixed; z-index: 999; bottom: 24px; right: 16px;
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 10px; padding: 12px 14px;
+  box-shadow: 0 6px 28px rgba(0,0,0,.6); width: 200px;
+}
+.popup-box.appt-style  { background: #1e0a0a; border-color: rgba(224,80,80,.5); }
+.popup-box.work-style  { background: #0e1e16; border-color: rgba(78,205,196,.5); }
+.popup-title { font-size: 11px; font-weight: 500; color: var(--text2); margin-bottom: 8px; letter-spacing: .04em; }
+.popup-sub   { font-size: 10px; color: var(--text3); margin-bottom: 4px; }
+.popup-notes { font-size: 11px; color: var(--text2); line-height: 1.5; border-top: 1px solid rgba(224,80,80,.2); padding-top: 6px; margin-top: 4px; }
+.popup-btn {
+  display: block; width: 100%; text-align: left;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 6px; color: var(--text2); font-size: 11px;
+  padding: 7px 10px; margin-bottom: 5px; transition: background .12s;
+}
+.popup-btn:hover { background: var(--surface2); }
+.popup-btn.save  { background: rgba(255,220,180,.1); color: var(--text); text-align: center; }
+.popup-btn.muted { color: var(--text3); }
+.popup-cancel { display: block; width: 100%; text-align: center; background: transparent; border: none; color: var(--text3); font-size: 10px; padding: 4px; margin-top: 2px; }
+.popup-select {
+  flex: 1; background: #0a1a12; border: 1px solid rgba(78,205,196,.3);
+  border-radius: 4px; color: var(--work-t); font-size: 10px;
+  padding: 3px 4px; outline: none; -webkit-appearance: none;
+}
+.popup-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.popup-row span { font-size: 10px; color: var(--text3); width: 32px; }
+
+/* ── Card ────────────────────────────────────────────── */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1rem 1.25rem;
+}
+.card h3, .section-title {
+  font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 600;
+  color: var(--text3); letter-spacing: .08em; text-transform: uppercase;
+}
+.collapse-header {
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none;
+}
+.collapse-header .section-title { margin-bottom: 0; }
+.chevron { font-size: 11px; color: var(--text3); transition: transform .2s; }
+.chevron.open { transform: rotate(180deg); }
+
+/* ── Activity panel ──────────────────────────────────── */
+.act-panel {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 12px; padding: 1rem 1.25rem;
+}
+.act-panel-hint { font-size: 11px; color: var(--text3); margin-bottom: 12px; line-height: 1.6; }
+.act-grid {
+  display: grid;
+  grid-template-columns: 54px repeat(7, minmax(0,1fr));
+  gap: 3px;
+}
+.act-lbl {
+  display: flex; align-items: center; justify-content: flex-end;
+  padding-right: 7px; font-size: 10px; color: var(--text3);
+  height: 42px; white-space: nowrap;
+}
+.opt-gap { grid-column: 1 / -1; height: 5px; }
+.act-cell {
+  height: 42px; border-radius: 5px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px; font-size: 10px; text-align: center; padding: 4px 3px;
+  cursor: pointer; border: 1px dashed rgba(255,220,180,.1);
+  background: var(--bg2); color: var(--text3);
+  transition: all .15s; user-select: none; letter-spacing: .02em;
+}
+.act-cell:hover:not(.is-on):not(.is-locked) { border-color: rgba(255,220,180,.3); color: var(--text2); }
+.act-cell.is-locked { opacity: .32; cursor: not-allowed; }
+.act-cell.pilates-on   { background: var(--pil-bg);   border: 1px solid rgba(184,126,240,.55); color: var(--pil-t);   cursor: default; }
+.act-cell.sa-on        { background: var(--sa-bg);    border: 1px solid rgba(42,184,168,.55);  color: var(--sa-t);    cursor: default; }
+.act-cell.sb-on        { background: var(--sb-bg);    border: 1px solid rgba(212,69,106,.55);  color: var(--sb-t);    cursor: default; }
+.act-cell.yoga-on      { background: var(--yoga-bg);  border: 1px solid rgba(232,200,50,.55);  color: var(--yoga-t);  cursor: default; }
+.act-cell.climb-on     { background: var(--climb-bg); border: 1px solid rgba(155,127,232,.55); color: var(--climb-t); }
+.act-cell.surf-on      { background: var(--surf-bg);  border: 1px solid rgba(58,158,200,.55);  color: var(--surf-t);  cursor: default; }
+.act-cell.is-on:hover  { filter: brightness(1.1); }
+.act-cell select {
+  background: #0a0d14; border: 1px solid rgba(255,255,255,.15);
+  border-radius: 3px; color: var(--text2); font-size: 9px;
+  outline: none; -webkit-appearance: none; text-align: center;
+  padding: 1px 3px; width: 100%; max-width: 58px;
+}
+
+/* ── Workout rotation ────────────────────────────────── */
+.rot-section  { border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+.rot-header   { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; cursor: pointer; user-select: none; transition: background .15s; }
+.rot-header:hover { background: var(--surface2); }
+.rot-header.sa { border-left: 3px solid var(--sa); }
+.rot-header.sb { border-left: 3px solid var(--sb); }
+.rot-header-left { display: flex; align-items: center; gap: 8px; }
+.rot-badge { font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+.rot-badge.sa { background: var(--sa-bg); border: 1px solid rgba(42,184,168,.5); color: var(--sa-t); }
+.rot-badge.sb { background: var(--sb-bg); border: 1px solid rgba(212,69,106,.5); color: var(--sb-t); }
+.rot-header-name { font-size: 11px; color: var(--text2); }
+.rot-body        { display: none; padding: 12px; background: var(--bg2); border-top: 1px solid var(--border); }
+.rot-body.open   { display: block; }
+.rot-sec-title   { font-size: 9px; color: var(--text3); letter-spacing: .06em; text-transform: uppercase; margin: 10px 0 4px; }
+.rot-sec-title:first-child { margin-top: 0; }
+.rot-item        { font-size: 11px; color: var(--text2); padding: 3px 0; display: flex; align-items: baseline; gap: 6px; }
+.rot-item::before{ content: '·'; color: var(--text3); flex-shrink: 0; }
+.rot-finish      { font-size: 11px; font-weight: 500; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+.rot-finish.sa   { color: var(--sa-t); }
+.rot-finish.sb   { color: var(--sb-t); }
+.rot-edit-input  {
+  display: block; width: 100%; background: var(--bg2);
+  border: 1px solid var(--border2); border-radius: 4px;
+  color: var(--text2); font-size: 10px; padding: 5px 7px;
+  outline: none; margin-bottom: 4px; box-sizing: border-box;
+}
+
+/* ── Surf forecast ───────────────────────────────────── */
+.forecast-days { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
+.fday {
+  background: var(--bg2); border-radius: 6px; padding: 6px 3px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  border: 1px solid var(--border);
+}
+.fday .fd-name { font-size: 9px; color: var(--text3); letter-spacing: .04em; text-transform: uppercase; }
+.fday .fd-wave { font-size: 14px; line-height: 1; }
+.fday .fd-size { font-size: 8px; font-weight: 500; color: var(--text); }
+.fday select   { background: transparent; border: none; color: var(--text2); font-size: 9px; width: 100%; outline: none; -webkit-appearance: none; text-align: center; }
+.fday.surfable { border-color: rgba(58,158,200,.55); background: rgba(10,30,42,.85); }
+.fday.surfable .fd-name, .fday.surfable .fd-size { color: var(--surf-t); }
+.fday.ok-surf  { border-color: rgba(58,158,200,.55); background: rgba(10,30,42,.85); }
+.fday.ok-surf .fd-name, .fday.ok-surf .fd-size { color: #4ade80; }
+.fday.ok-surf select { color: #4ade80; }
+.fday.flat     { opacity: .38; }
+
+/* ── Stats ───────────────────────────────────────────── */
+.stat-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); }
+.stat-row:last-child { border-bottom: none; }
+.stat-label { font-size: 12px; color: var(--text2); }
+.stat-val   { font-size: 13px; font-weight: 500; color: var(--accent); font-family: 'Syne', sans-serif; }
+.stat-val.warn { color: #d4882a; }
+
+/* ── Appointments ────────────────────────────────────── */
+.appt-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.appt-item { display: flex; flex-direction: column; background: var(--bg2); border-radius: 6px; border: 1px solid rgba(224,80,80,.25); overflow: hidden; }
+.appt-item-row { display: flex; align-items: center; gap: 6px; padding: 6px 8px; }
+.appt-day  { font-size: 10px; color: var(--appt-t); min-width: 28px; font-weight: 500; }
+.appt-time { font-size: 10px; color: var(--text3); min-width: 44px; }
+.appt-desc { font-size: 11px; color: var(--text2); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.appt-del  { background: transparent; border: none; color: var(--text3); font-size: 13px; padding: 0 2px; line-height: 1; transition: color .15s; flex-shrink: 0; }
+.appt-del:hover { color: var(--appt); }
+.appt-note-text { font-size: 10px; color: var(--text3); padding: 4px 8px 6px; border-top: 1px solid rgba(224,80,80,.1); line-height: 1.5; }
+.appt-add-row { display: grid; grid-template-columns: 80px 70px 1fr auto; gap: 5px; align-items: center; }
+.form-input {
+  background: var(--bg2); border: 1px solid var(--border2); border-radius: 5px;
+  color: var(--text2); font-size: 11px; padding: 5px 7px; outline: none;
+  transition: border-color .15s; width: 100%;
+}
+.form-input:focus { border-color: rgba(224,80,80,.5); }
+.form-input::placeholder { color: var(--text3); }
+select.form-input { -webkit-appearance: none; }
+.add-btn {
+  padding: 5px 10px; background: transparent;
+  border: 1px solid rgba(224,80,80,.4); border-radius: 5px;
+  color: var(--appt-t); font-size: 11px; transition: all .15s; white-space: nowrap;
+}
+.add-btn:hover { background: rgba(224,80,80,.15); }
+
+/* ── Checklist ───────────────────────────────────────── */
+.checklist-item { display: flex; align-items: center; gap: 8px; padding: 5px 2px; border-bottom: 1px solid var(--border); }
+.checklist-item:last-child { border-bottom: none; }
+.checklist-cb {
+  width: 15px; height: 15px; border-radius: 3px;
+  border: 1px solid var(--border2); background: var(--bg2);
+  cursor: pointer; flex-shrink: 0; appearance: none; -webkit-appearance: none; position: relative;
+}
+.checklist-cb:checked { background: var(--work); border-color: var(--work); }
+.checklist-cb:checked::after { content: '✓'; position: absolute; top: -1px; left: 1px; font-size: 11px; color: #0a1a0e; }
+.checklist-text { flex: 1; font-size: 11px; color: var(--text2); line-height: 1.4; cursor: pointer; }
+.checklist-text.done { text-decoration: line-through; color: var(--text3); }
+.checklist-del { background: transparent; border: none; color: var(--text3); font-size: 12px; padding: 0 2px; line-height: 1; transition: color .15s; flex-shrink: 0; }
+.checklist-del:hover { color: var(--appt); }
+.checklist-add-row { display: flex; gap: 6px; margin-top: 6px; }
+.checklist-add-row input { flex: 1; }
+.checklist-add-row button { padding: 5px 10px; background: transparent; border: 1px solid var(--border2); border-radius: 5px; color: var(--text2); font-size: 11px; }
+
+/* ── Divider ─────────────────────────────────────────── */
+.horizon { height: 1px; background: linear-gradient(90deg,transparent,var(--accent),transparent); opacity: .2; margin: 1.5rem 0; }
+
+/* ── Spacing helpers ─────────────────────────────────── */
+.mt1 { margin-top: 1rem; }
+.mt125 { margin-top: 1.25rem; }
+.mb6 { margin-bottom: 6px; }
+.tiny-label { font-size: 10px; color: var(--text3); letter-spacing: .05em; text-transform: uppercase; }
+
+/* ── Mobile ──────────────────────────────────────────── */
 @media(max-width:480px){
-  .toggle{width:36px;height:20px;}
-  .toggle::after{width:14px;height:14px;}
-  .toggle.on::after{transform:translateX(16px);}
-  .wk-cell,.yoga-cell,.surf-cell,.opt-cell{height:46px;font-size:11px;}
-  .act-lbl{height:46px;font-size:10px;}
-  .cell{height:32px;font-size:9px;}
-  .time-lbl{height:32px;font-size:9px;}
-}
-
-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border2);flex-wrap:wrap;gap:1rem;}
-.header-left h1{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,4vw,2.4rem);font-weight:700;letter-spacing:-0.03em;line-height:1;}
-.header-left h1 span{color:var(--accent);}
-.header-left .sub{font-size:11px;color:var(--text3);margin-top:5px;letter-spacing:0.08em;text-transform:uppercase;}
-.week-nav{display:flex;align-items:center;gap:10px;}
-.week-nav button{width:30px;height:30px;background:var(--surface);border:1px solid var(--border2);border-radius:50%;color:var(--text2);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
-.week-nav button:hover{background:var(--surface2);color:var(--text);}
-.week-label{font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--text2);min-width:150px;text-align:center;}
-
-.summary-row{display:flex;gap:7px;margin-bottom:1.5rem;flex-wrap:wrap;}
-.pill{display:flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;font-size:11px;font-family:'DM Mono',monospace;border:1px solid;letter-spacing:.02em;}
-.pill.work-pill   {background:var(--work);   border-color:var(--work-b);   color:var(--work-t);}
-.pill.workout-pill{background:var(--pilates);border-color:var(--pilates-b);color:var(--pilates-t);}
-.pill.yoga-pill   {background:var(--yoga);   border-color:var(--yoga-b);   color:var(--yoga-t);}
-.pill.climb-pill  {background:var(--climb);  border-color:var(--climb-b);  color:var(--climb-t);}
-.pill.surf-pill   {background:var(--surf);   border-color:var(--surf-b);   color:var(--surf-t);}
-
-.legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.1rem;align-items:center;}
-.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);}
-.leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.reset-btn{margin-left:auto;padding:4px 12px;background:transparent;border:1px solid var(--border2);border-radius:6px;color:var(--text3);font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;transition:all .15s;}
-.reset-btn:hover{border-color:var(--accent);color:var(--accent);}
-
-.day-controls{display:grid;grid-template-columns:54px repeat(7,minmax(0,1fr));gap:3px;margin-bottom:3px;}
-.day-head{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 4px;display:flex;flex-direction:column;align-items:center;gap:4px;transition:background .2s;}
-.day-head.is-work{background:rgba(26,42,30,.7);border-color:rgba(90,172,110,.3);}
-.day-name{font-family:'Syne',sans-serif;font-size:11px;font-weight:600;color:var(--text2);letter-spacing:.07em;text-transform:uppercase;}
-.day-date{font-size:10px;color:var(--text3);letter-spacing:.03em;font-family:'DM Mono',monospace;}
-.day-head.is-work .day-name{color:var(--work-t);}
-.toggle{width:30px;height:16px;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);cursor:pointer;position:relative;transition:background .2s,border-color .2s;flex-shrink:0;}
-.toggle.on{background:var(--work-b);border-color:var(--work-b);}
-.toggle::after{content:'';position:absolute;top:2px;left:2px;width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.45);transition:transform .2s,background .2s;}
-.toggle.on::after{transform:translateX(14px);background:white;}
-.day-badge{font-size:9px;letter-spacing:.05em;text-transform:uppercase;padding:2px 5px;border-radius:3px;}
-.day-badge.work{background:rgba(90,172,110,.15);color:var(--work-b);}
-.day-badge.off{background:var(--bg3);color:var(--text3);}
-
-.planner-grid{display:grid;grid-template-columns:54px repeat(7,minmax(0,1fr));gap:3px;}
-.time-lbl{display:flex;align-items:flex-start;justify-content:flex-end;padding-right:7px;padding-top:3px;font-size:10px;color:var(--text3);height:36px;letter-spacing:.03em;}
-.cell{height:36px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;text-align:center;line-height:1.2;padding:2px 3px;border:1px solid transparent;transition:filter .15s;letter-spacing:.02em;overflow:hidden;font-family:'DM Mono',monospace;}
-.cell:hover{filter:brightness(1.18);}
-.cell.work    {background:var(--work);    border-color:rgba(90,172,110,.25);  color:var(--work-t);}
-.cell.work.s  {border-color:rgba(90,172,110,.65);}
-.cell.work.e  {border-color:rgba(90,172,110,.5);}
-.cell.pilates {background:var(--pilates); border-color:rgba(184,126,240,.45); color:var(--pilates-t);}
-.cell.strength   {background:var(--strength);border-color:rgba(240,120,40,.45);  color:var(--strength-t);}
-.cell.strength-a {background:#0e2a2a;     border-color:rgba(42,184,168,.45);   color:#90f0e0;}
-.cell.strength-b {background:var(--strength);border-color:rgba(240,120,40,.45);color:var(--strength-t);}
-.cell.pilates.run    {background:var(--pilates); border-color:rgba(184,126,240,.6);  color:var(--pilates-t);opacity:.85;}
-.cell.strength.run   {background:var(--strength);border-color:rgba(240,120,40,.6);   color:var(--strength-t);opacity:.85;}
-.cell.strength-a.run {background:#0e2a2a;        border-color:rgba(42,184,168,.6);   color:#90f0e0;opacity:.85;}
-.cell.strength-b.run {background:var(--strength);border-color:rgba(240,120,40,.6);   color:var(--strength-t);opacity:.85;}
-.cell.run     {background:var(--run);     border-color:rgba(200,168,50,.4);   color:var(--run-t);}
-.cell.yoga    {background:var(--yoga);    border-color:rgba(232,200,50,.45);  color:var(--yoga-t);}
-.cell.climb   {background:var(--climb);   border-color:rgba(200,122,32,.45);  color:var(--climb-t);}
-.cell.surf    {background:var(--surf);    border-color:rgba(58,158,200,.4);   color:var(--surf-t);}
-.cell.appt    {background:var(--appt);    border-color:rgba(224,80,80,.45);   color:var(--appt-t);cursor:pointer;position:relative;}
-
-/* appointment popup box - fixed bottom right */
-.appt-bubble{position:fixed;z-index:999;background:#1e0a0a;border:1px solid rgba(224,80,80,.5);border-radius:8px;padding:12px 14px;width:200px;box-shadow:0 4px 24px rgba(0,0,0,.6);bottom:24px;right:16px;}
-.appt-bubble-title{font-size:12px;font-weight:500;color:var(--appt-t);font-family:'DM Mono',monospace;margin-bottom:4px;}
-.appt-bubble-time{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:4px;}
-.appt-bubble-notes{font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;line-height:1.5;border-top:1px solid rgba(224,80,80,.2);padding-top:6px;margin-top:4px;}
-.cell.sleep   {background:var(--sleep);   color:var(--sleep-t);}
-.cell.commute {background:var(--commute); border-color:rgba(255,220,180,.04); color:var(--commute-t);}
-.cell.free    {background:transparent;   border-color:var(--border);          color:var(--free-t);}
-
-.limit-note{font-size:11px;color:var(--text3);margin-top:4px;text-align:center;display:none;}
-.limit-note.show{display:block;}
-
-.act-panel{margin-top:1.5rem;background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:1rem 1.25rem;}
-.act-panel-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;}
-.act-panel-hint{font-size:11px;color:var(--text3);margin-bottom:12px;line-height:1.6;}
-.act-grid{display:grid;grid-template-columns:54px repeat(7,minmax(0,1fr));gap:3px;}
-.act-lbl{display:flex;align-items:center;justify-content:flex-end;padding-right:7px;font-size:10px;color:var(--text3);height:42px;white-space:nowrap;letter-spacing:.02em;}
-.opt-gap{grid-column:1 / -1;height:5px;}
-
-.wk-cell{height:42px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;text-align:center;padding:2px 3px;cursor:pointer;border:1px solid;transition:all .15s;letter-spacing:.02em;user-select:none;font-family:'DM Mono',monospace;}
-.wk-cell.pilates-mode  {background:var(--pilates); border-color:rgba(184,126,240,.55); color:var(--pilates-t);}
-.wk-cell.strength-mode {background:var(--strength); border-color:rgba(240,120,40,.55);  color:var(--strength-t);}
-.wk-cell.strength-a-mode{background:#0e2a2a;border:1px solid rgba(42,184,168,.55);color:#90f0e0;}
-.wk-cell.strength-b-mode{background:var(--strength);border:1px solid rgba(240,120,40,.55);color:var(--strength-t);}
-.wk-cell.inactive{background:var(--bg3);border:1px dashed rgba(255,220,180,.1);color:var(--text3);}
-
-.yoga-cell{height:42px;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;text-align:center;padding:4px 3px;cursor:pointer;border:1px dashed rgba(255,220,180,.1);background:var(--bg3);color:var(--text3);transition:border-color .15s;letter-spacing:.02em;user-select:none;font-family:'DM Mono',monospace;}
-.yoga-cell:hover:not(.yoga-on){border-color:rgba(232,200,50,.4);color:var(--yoga-t);}
-.yoga-cell.yoga-on:hover{filter:brightness(1.12);}
-.yoga-cell.yoga-on{background:var(--yoga);border:1px solid rgba(232,200,50,.55);color:var(--yoga-t);cursor:default;}
-.yoga-cell .yc-label{font-size:10px;line-height:1;}
-.yoga-cell select{background:#0a0d14;border:1px solid rgba(255,255,255,.15);border-radius:3px;color:var(--text2);font-family:'DM Mono',monospace;font-size:10px;cursor:pointer;outline:none;-webkit-appearance:none;text-align:center;padding:1px 3px;width:100%;max-width:62px;}
-
-.surf-cell{height:42px;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;text-align:center;padding:4px 3px;cursor:pointer;border:1px dashed rgba(255,220,180,.1);background:var(--bg3);color:var(--text3);transition:border-color .15s;letter-spacing:.02em;user-select:none;font-family:'DM Mono',monospace;}
-.surf-cell:hover:not(.surf-on):not(.surf-locked):not(.surf-disabled){border-color:rgba(58,158,200,.4);color:var(--surf-t);}
-.surf-cell.surf-on:hover{filter:brightness(1.12);}
-.surf-cell.surf-on{background:var(--surf);border:1px solid rgba(58,158,200,.55);color:var(--surf-t);cursor:default;}
-.surf-cell.surf-locked{opacity:.32;cursor:not-allowed;}
-.surf-cell.surf-disabled{opacity:.18;cursor:default;}
-.surf-cell .sc-label{font-size:10px;line-height:1;}
-.surf-cell select{background:#0a0d14;border:1px solid rgba(255,255,255,.15);border-radius:3px;color:var(--text2);font-family:'DM Mono',monospace;font-size:10px;cursor:pointer;outline:none;-webkit-appearance:none;text-align:center;padding:1px 3px;width:100%;max-width:62px;}
-
-.opt-cell{height:42px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;border:1px dashed rgba(255,220,180,.1);background:var(--bg3);color:var(--text3);transition:all .15s;text-align:center;padding:2px 3px;user-select:none;letter-spacing:.02em;font-family:'DM Mono',monospace;}
-.opt-cell:hover:not(.opt-disabled):not(.opt-locked){border-color:rgba(255,220,180,.3);color:var(--text2);}
-.opt-cell.opt-disabled{opacity:.18;cursor:default;}
-.opt-cell.opt-locked{opacity:.32;cursor:not-allowed;}
-
-.rotation-bar{margin-top:1.25rem;background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:1rem 1.25rem;}
-.rotation-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
-.rotation-row{display:flex;flex-direction:column;gap:8px;}
-.rot-section{border-radius:8px;overflow:hidden;border:1px solid var(--border);}
-.rot-header{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;cursor:pointer;user-select:none;transition:background .15s;}
-.rot-header:hover{background:var(--surface2);}
-.rot-header.sa{border-left:3px solid #2ab8a8;}
-.rot-header.sb{border-left:3px solid var(--strength-b);}
-.rot-header-left{display:flex;align-items:center;gap:8px;}
-.rot-badge{font-size:10px;font-family:'DM Mono',monospace;padding:2px 8px;border-radius:4px;font-weight:500;}
-.rot-badge.sa{background:#0e2a2a;border:1px solid rgba(42,184,168,.5);color:#90f0e0;}
-.rot-badge.sb{background:var(--strength);border:1px solid rgba(240,120,40,.5);color:var(--strength-t);}
-.rot-header-name{font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;}
-.rot-chevron{font-size:10px;color:var(--text3);transition:transform .2s;}
-.rot-chevron.open{transform:rotate(180deg);}
-.rot-body{display:none;padding:12px;background:var(--bg3);border-top:1px solid var(--border);}
-.rot-body.open{display:block;}
-.rot-section-title{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;margin-top:10px;}
-.rot-section-title:first-child{margin-top:0;}
-.rot-item{font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;padding:3px 0;display:flex;align-items:baseline;gap:6px;}
-.rot-item::before{content:'·';color:var(--text3);flex-shrink:0;}
-.rot-finish{font-size:11px;font-family:'DM Mono',monospace;font-weight:500;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
-.rot-finish.sa{color:#90f0e0;}
-.rot-finish.sb{color:var(--strength-t);}
-.rot-week{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:52px;}
-.rot-label{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:.04em;}
-.rot-pill{font-size:10px;font-family:'DM Mono',monospace;padding:3px 8px;border-radius:4px;font-weight:500;}
-.rot-pill.a{background:#0e2a2a;border:1px solid rgba(42,200,180,.5);color:#90f0e0;}
-.rot-pill.b{background:var(--strength);border:1px solid rgba(240,120,40,.5);color:var(--strength-t);}
-.forecast-bar{margin-top:1.25rem;background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:1rem 1.25rem;}
-.forecast-bar h3{font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
-.forecast-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
-.fday{background:var(--bg3);border-radius:6px;padding:6px 3px;display:flex;flex-direction:column;align-items:center;gap:3px;border:1px solid var(--border);}
-.fday .fd-name{font-size:9px;color:var(--text3);letter-spacing:.04em;text-transform:uppercase;font-family:'DM Mono',monospace;}
-.fday .fd-wave{font-size:14px;line-height:1;}
-.fday .fd-size{font-size:8px;font-weight:500;color:var(--text);font-family:'Syne',sans-serif;}
-.fday .fd-tag{font-size:8px;padding:2px 4px;border-radius:3px;letter-spacing:.03em;font-family:'DM Mono',monospace;}
-.fday.surfable{border-color:rgba(58,158,200,.55);background:rgba(10,30,42,.85);}
-.fday.surfable .fd-name,.fday.surfable .fd-size{color:var(--surf-t);}
-.fday.surfable .fd-tag{background:rgba(58,158,200,.2);color:var(--surf-t);}
-.fday.flat{opacity:.38;}
-.fday.flat .fd-tag{background:var(--bg3);color:var(--text3);}
-.fday.ok-surf{border-color:rgba(58,158,200,.55);background:rgba(10,30,42,.85);}
-.fday.ok-surf .fd-name,.fday.ok-surf .fd-size{color:#4ade80;}
-.fday.ok-surf select{color:#4ade80;}
-.fday select{background:transparent;border:none;color:var(--text2);font-family:'DM Mono',monospace;font-size:9px;cursor:pointer;width:100%;outline:none;-webkit-appearance:none;text-align:center;}
-
-.bottom-row{margin-top:1.25rem;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;}
-.card h3{font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
-.stat-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);}
-.stat-row:last-child{border-bottom:none;}
-.stat-label{font-size:12px;color:var(--text2);}
-.stat-val{font-size:13px;font-weight:500;color:var(--accent);font-family:'Syne',sans-serif;}
-.stat-val.warn{color:var(--accent2);}
-
-.appt-list{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
-.appt-item{display:flex;flex-direction:column;background:var(--bg3);border-radius:6px;border:1px solid rgba(224,80,80,.25);overflow:hidden;}
-.appt-item-row{display:flex;align-items:center;gap:6px;padding:6px 8px;}
-.appt-item .appt-day{font-size:10px;color:var(--appt-t);min-width:28px;font-weight:500;}
-.appt-item .appt-time{font-size:10px;color:var(--text3);min-width:44px;}
-.appt-item .appt-desc{font-size:11px;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.appt-item .appt-del{background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:0 2px;line-height:1;transition:color .15s;flex-shrink:0;}
-.appt-item .appt-del:hover{color:var(--appt-b);}
-.appt-notes-text{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;padding:4px 8px 6px;border-top:1px solid rgba(224,80,80,.1);margin-top:2px;line-height:1.5;}
-.appt-add-row{display:grid;grid-template-columns:80px 70px 1fr auto;gap:5px;align-items:center;}
-.appt-add-row select,.appt-add-row input{background:var(--bg3);border:1px solid var(--border2);border-radius:5px;color:var(--text2);font-family:'DM Mono',monospace;font-size:11px;padding:5px 7px;outline:none;transition:border-color .15s;width:100%;}
-.appt-add-row select{-webkit-appearance:none;cursor:pointer;}
-.appt-add-row input::placeholder{color:var(--text3);}
-.appt-add-row select:focus,.appt-add-row input:focus{border-color:rgba(224,80,80,.5);}
-.appt-add-btn{padding:5px 10px;background:transparent;border:1px solid rgba(224,80,80,.4);border-radius:5px;color:var(--appt-t);font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;transition:all .15s;white-space:nowrap;}
-.appt-add-btn:hover{background:rgba(224,80,80,.15);}
-
-.vac-list{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
-.vac-item{display:flex;align-items:center;gap:6px;background:var(--bg3);border-radius:6px;padding:6px 8px;border:1px solid rgba(90,172,110,.25);}
-.vac-item .vac-dates{font-size:10px;color:var(--work-t);min-width:80px;}
-.vac-item .vac-desc{font-size:11px;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.vac-item .vac-del{background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:0 2px;line-height:1;transition:color .15s;flex-shrink:0;}
-.vac-item .vac-del:hover{color:var(--accent2);}
-.vac-add-row{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:5px;}
-.vac-add-row input{background:var(--bg3);border:1px solid var(--border2);border-radius:5px;color:var(--text2);font-family:'DM Mono',monospace;font-size:11px;padding:5px 7px;outline:none;transition:border-color .15s;width:100%;}
-.vac-add-row input:focus{border-color:rgba(90,172,110,.5);}
-.notes-textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-family:'DM Mono',monospace;font-size:12px;padding:10px;resize:none;height:88px;outline:none;transition:border-color .15s;line-height:1.6;}
-
-.notes-textarea:focus{border-color:var(--border2);}
-.notes-textarea::placeholder{color:var(--text3);}
-.horizon{height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.2;margin:1.75rem 0 1.25rem;}
-
-@media(max-width:620px){
-  .bottom-row{grid-template-columns:1fr;}
-  .forecast-days{grid-template-columns:repeat(4,1fr);}
-  .appt-add-row{grid-template-columns:1fr 1fr;}
+  .toggle { width: 36px; height: 20px; }
+  .toggle::after { width: 14px; height: 14px; }
+  .toggle.on::after { transform: translateX(16px); }
+  .act-cell { height: 46px; font-size: 11px; }
+  .act-lbl  { height: 46px; }
+  .cell, .time-lbl { height: 32px; font-size: 9px; }
+  .appt-add-row { grid-template-columns: 1fr 1fr; }
+  .forecast-days { grid-template-columns: repeat(4,1fr); }
 }
 </style>
 </head>
 <body>
 <div class="app">
 
+<!-- ── Header ── -->
 <header>
   <div class="header-left">
     <h1>week<span>.</span>plan</h1>
-    <p class="sub">4 × 10h shifts · 7 AM–5 PM · active lifestyle</p>
+    <p class="sub">4×10h shifts · 7 AM–5:30 PM · active lifestyle</p>
   </div>
-  <div class="week-nav">
+  <nav class="week-nav">
     <button id="prev-week">&#8592;</button>
     <div class="week-label" id="week-label">—</div>
     <button id="next-week">&#8594;</button>
-  </div>
+  </nav>
 </header>
 
-<div class="summary-row" id="summary-row"></div>
-
+<!-- ── Legend ── -->
 <div class="legend">
-  <div class="leg-item"><div class="leg-dot" style="background:var(--work-b)"></div>Work</div>
-  <div class="leg-item"><div class="leg-dot" style="background:var(--pilates-b)"></div>Pilates 45m</div>
-  <div class="leg-item"><div class="leg-dot" style="background:var(--strength-b)"></div>Strength 40m</div>
-  <div class="leg-item"><div class="leg-dot" style="background:var(--yoga-b)"></div>Hot yoga 1h</div>
-  <div class="leg-item"><div class="leg-dot" style="background:var(--climb-b)"></div>Climbing</div>
-  <div class="leg-item"><div class="leg-dot" style="background:var(--surf-b);opacity:.8"></div>Surf 3–4h</div>
-  <div class="leg-item"><div class="leg-dot" style="background:var(--appt-b)"></div>Appointment</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--work)"></div>Work</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--pil)"></div>Pilates</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--sa)"></div>Strength A</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--sb)"></div>Strength B</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--yoga)"></div>Hot yoga</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--climb)"></div>Climbing</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--surf)"></div>Surf</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--appt)"></div>Appointment</div>
   <button class="reset-btn" id="reset-btn">Reset week</button>
 </div>
 
+<!-- ── Day toggles ── -->
 <div class="day-controls" id="day-controls"></div>
-<div class="limit-note" id="limit-note">max 4 work days reached</div>
-<div class="planner-grid" id="planner-grid"></div>
+<div id="planner-grid" class="planner-grid"></div>
 
-<div class="act-panel">
-  <div class="act-panel-title">Daily activity options</div>
-  <div class="act-panel-hint">
-    Tap to add · tap again to remove · booked cells show ✕
+<!-- ── Appointments & notes ── -->
+<div class="card mt1">
+  <div class="collapse-header" id="appt-header">
+    <span class="section-title">Appointments &amp; notes</span>
+    <span class="chevron" id="appt-chev">▼</span>
   </div>
+  <div id="appt-body" style="display:none;margin-top:10px;">
+    <div class="appt-list" id="appt-list"></div>
+    <div class="appt-add-row">
+      <select id="appt-day" class="form-input"></select>
+      <input type="time" id="appt-time" class="form-input" value="09:00">
+      <input type="text" id="appt-desc" class="form-input" placeholder="e.g. Dr. Smith checkup">
+      <button class="add-btn" id="appt-add-btn">+ add</button>
+    </div>
+    <input type="text" id="appt-notes" class="form-input" placeholder="notes for this appointment (optional)" style="margin-top:5px;">
+    <div style="margin-top:12px;">
+      <div class="tiny-label mb6">General notes</div>
+      <div id="checklist-items"></div>
+      <div class="checklist-add-row">
+        <input type="text" id="checklist-input" class="form-input" placeholder="add a note or task...">
+        <button id="checklist-add">+</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Activity panel ── -->
+<div class="act-panel mt1">
+  <div class="section-title" style="margin-bottom:3px;">Daily activity options</div>
+  <div class="act-panel-hint">Tap to add · tap booked cell to remove · tap grid cells to place directly</div>
   <div class="act-grid" id="act-grid"></div>
 </div>
 
 <div class="horizon"></div>
 
-<div class="rotation-bar">
-  <div class="rotation-title">Weekly workout routines <span id="circuit-label" style="font-size:10px;color:var(--text3);text-transform:none;letter-spacing:0;font-family:'DM Mono',monospace;font-weight:400;margin-left:8px;"></span></div>
-  <div class="rotation-row" id="rotation-row"></div>
-</div>
-
-<div class="forecast-bar">
-  <h3>Surf forecast</h3>
-  <div class="forecast-days" id="forecast-days"></div>
-</div>
-
-<div class="bottom-row">
-  <div class="card"><h3>This week</h3><div id="stats"></div></div>
-  <div class="card">
-    <h3>Appointments &amp; notes</h3>
-    <div class="appt-list" id="appt-list"></div>
-    <div class="appt-add-row">
-      <select id="appt-day"></select>
-      <input type="time" id="appt-time" value="09:00">
-      <input type="text" id="appt-desc" placeholder="e.g. Dr. Smith checkup">
-      <button class="appt-add-btn" id="appt-add-btn">+ add</button>
-    </div>
-    <input type="text" id="appt-notes" placeholder="notes for this appointment (optional)" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:5px;color:var(--text2);font-family:'DM Mono',monospace;font-size:11px;padding:5px 7px;outline:none;margin-top:5px;box-sizing:border-box;transition:border-color .15s;" onfocus="this.style.borderColor='rgba(224,80,80,.5)'" onblur="this.style.borderColor=''">
-    <div style="margin-top:10px;">
-      <textarea class="notes-textarea" id="notes-area" placeholder="general notes, surf links, gym hours..."></textarea>
-    </div>
+<!-- ── Workout routines ── -->
+<div class="card">
+  <div class="collapse-header" id="rotation-header">
+    <span class="section-title">Weekly workout routines <span id="circuit-label" style="font-size:10px;text-transform:none;letter-spacing:0;font-weight:400;margin-left:8px;color:var(--text3);"></span></span>
+    <span class="chevron" id="rotation-chev">▼</span>
+  </div>
+  <div id="rotation-body" style="display:none;margin-top:10px;display:none;">
+    <div id="rotation-row" style="display:flex;flex-direction:column;gap:8px;"></div>
   </div>
 </div>
 
+<!-- ── Surf forecast ── -->
+<div class="card mt125">
+  <div class="collapse-header" id="forecast-header">
+    <span class="section-title">Surf forecast</span>
+    <span class="chevron" id="forecast-chev">▼</span>
+  </div>
+  <div id="forecast-body" style="display:none;margin-top:10px;">
+    <div class="forecast-days" id="forecast-days"></div>
+  </div>
 </div>
+
+<!-- ── This week stats ── -->
+<div class="card mt125">
+  <div class="collapse-header" id="stats-header">
+    <span class="section-title">This week</span>
+    <span class="chevron" id="stats-chev">▼</span>
+  </div>
+  <div id="stats-body" style="display:none;margin-top:10px;"><div id="stats"></div></div>
+</div>
+
+</div><!-- /.app -->
 <script>
-const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-const HOURS=['5 AM','6 AM','7 AM','8 AM','9 AM','10 AM','11 AM','12 PM','1 PM','2 PM','3 PM','4 PM','5 PM','6 PM','7 PM','8 PM','9 PM','10 PM','11 PM'];
-const HI={};HOURS.forEach((h,i)=>HI[h]=i);
-const YOGA_TIMES=['6 AM','7 AM','8 AM','9 AM','10 AM','11 AM','12 PM','1 PM','2 PM','3 PM','4 PM','5 PM','6 PM'];
-const SURF_STARTS=['5 AM','6 AM','7 AM','8 AM','9 AM','10 AM','11 AM','12 PM'];
-const CLIMB_TIMES=['6 AM','7 AM','8 AM','9 AM','10 AM','11 AM','12 PM','1 PM','2 PM','3 PM','4 PM','5 PM','6 PM','7 PM','8 PM','9 PM'];
+// ── Constants ────────────────────────────────────────────
+const DAYS  = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const HOURS = ['5 AM','6 AM','7 AM','8 AM','9 AM','10 AM','11 AM','12 PM',
+               '1 PM','2 PM','3 PM','4 PM','5 PM','6 PM','7 PM','8 PM','9 PM','10 PM','11 PM'];
+const HI = {};
+HOURS.forEach((h,i) => HI[h] = i);
 
-let workDays=[true,true,true,true,false,false,false];
-let workoutType=['pilates','pilates','strength-a','strength-b',null,null,null];
-let offWorkout=[null,null,null,null,'none','none','none'];
-let yogaDays=Array(7).fill(false);
-let yogaTime=Array(7).fill('7 AM');
-let climbDays=Array(7).fill(false);
-let climbTime=Array(7).fill('10 AM');
-let surfDays=Array(7).fill(false);
-let surfWorkDay=Array(7).fill(false);
-let surfStart=Array(7).fill('7 AM');
-let surfFcast=Array(7).fill('ok');
-let appointments=[];
-let notes='';
-let weekOff=0;
+const YOGA_TIMES  = HOURS.filter(h => HI[h] >= HI['6 AM'] && HI[h] <= HI['6 PM']);
+const SURF_STARTS = HOURS.filter(h => HI[h] <= HI['12 PM']);
+const CLIMB_TIMES = HOURS.filter(h => HI[h] >= HI['6 AM'] && HI[h] <= HI['9 PM']);
 
-const isSurfable=i=>surfFcast[i]==='good'||surfFcast[i]==='ok';
-function hoursFrom(start,count){const idx=HI[start];if(idx===undefined)return[];return HOURS.slice(idx,Math.min(idx+count,HOURS.length));}
-function timeToHour(t){const[h,m]=t.split(':').map(Number);const total=h*60+m;let best=HOURS[0],bestD=Infinity;HOURS.forEach(hr=>{const[hh]=parseHr(hr);const d=Math.abs(hh*60-total);if(d<bestD){bestD=d;best=hr;}});return best;}
-function parseHr(hr){const[t,ap]=hr.split(' ');let h=parseInt(t);if(ap==='PM'&&h!==12)h+=12;if(ap==='AM'&&h===12)h=0;return[h,0];}
-function isStrength(v){return v==='strength-a'||v==='strength-b';}
-function countWk(){let n=0;DAYS.forEach((_,i)=>{if(workDays[i]){if(workoutType[i]==='pilates'||isStrength(workoutType[i]))n++;}else{if(offWorkout[i]==='pilates'||isStrength(offWorkout[i]))n++;}});return n;}
+// ── State ────────────────────────────────────────────────
+let workDays    = [true,true,true,true,false,false,false];
+let workStart   = Array(7).fill('7 AM');
+let workEnd     = Array(7).fill('5 PM');
+let workoutType = ['pilates','pilates','strength-a','strength-b',null,null,null];
+let offWorkout  = [null,null,null,null,'none','none','none'];
+let yogaDays    = Array(7).fill(false);
+let yogaTime    = Array(7).fill('7 AM');
+let climbDays   = Array(7).fill(false);
+let climbTime   = Array(7).fill('10 AM');
+let surfDays    = Array(7).fill(false);
+let surfWorkDay = Array(7).fill(false);
+let surfStart   = Array(7).fill('7 AM');
+let surfFcast   = Array(7).fill('ok');
+let appointments  = [];
+let cellActivities = {};
+let customWorkouts = {};
+let checklist   = [];
+let notes       = '';
+let weekOff     = 0;
 
-function workSched(d){
-  const wt=workoutType[d],hasYoga=yogaDays[d],hasClimb=climbDays[d],hasPreSurf=surfWorkDay[d]&&isSurfable(d);
-  const s={};HOURS.forEach(h=>s[h]={cls:'free',lb:''});
-  Object.assign(s,{'5 AM':{cls:'sleep',lb:'sleep'},'6 AM':{cls:'sleep',lb:'sleep'},'7 AM':{cls:'work s',lb:'work'},'8 AM':{cls:'work',lb:'work'},'9 AM':{cls:'work',lb:'work'},'10 AM':{cls:'work',lb:'work'},'11 AM':{cls:'work',lb:'work'},'12 PM':{cls:'work',lb:'work'},'1 PM':{cls:'work',lb:'work'},'2 PM':{cls:'work',lb:'work'},'3 PM':{cls:'work',lb:'work'},'4 PM':{cls:'work e',lb:'work'},'5 PM':{cls:'commute',lb:''},'9 PM':{cls:'sleep',lb:'sleep'},'10 PM':{cls:'sleep',lb:'sleep'},'11 PM':{cls:'sleep',lb:'sleep'}});
-  if(hasPreSurf){s['5 AM']={cls:'surf',lb:'🏄'};s['6 AM']={cls:'surf',lb:'🏄'};}
-  appointments.filter(a=>a.day===d).forEach(a=>{s[timeToHour(a.time)]={cls:'appt',lb:'❗'};});
-  if(hasClimb){const ct=(climbTime[d]&&HI[climbTime[d]]>=HI['7 PM'])?climbTime[d]:'7 PM';s[ct]={cls:'climb',lb:'🧗'};const nx=HOURS[HI[ct]+1];if(nx)s[nx]={cls:'climb',lb:'🧗'};}
-  else if(hasYoga){const yt=(HI[yogaTime[d]]>=HI['6 PM'])?yogaTime[d]:'6 PM';s[yt]={cls:'yoga',lb:'🧘'};const nx=HOURS[HI[yt]+1];if(nx)s[nx]={cls:'free',lb:''};s['8 PM']={cls:'free',lb:''};}
-  else if(wt==='pilates'){s['6 PM']={cls:'pilates',lb:'🤸'};s['7 PM']={cls:'pilates run',lb:'🏃'};}
-  else if(isStrength(wt)){const sc=wt==='strength-a'?'strength-a':'strength-b';s['6 PM']={cls:sc,lb:'🏋️'};s['7 PM']={cls:sc+' run',lb:'🏃'};}
-  else{s['6 PM']={cls:'free',lb:''};s['7 PM']={cls:'free',lb:''};s['8 PM']={cls:'free',lb:''};}
+// ── Helpers ──────────────────────────────────────────────
+const isSurfable = i => surfFcast[i] === 'good' || surfFcast[i] === 'ok';
+const isStrength = v => v === 'strength-a' || v === 'strength-b';
+const scCls      = v => v === 'strength-a' ? 'strength-a' : 'strength-b';
+
+function countWorkouts() {
+  let n = 0;
+  DAYS.forEach((_,i) => {
+    const w = workDays[i] ? workoutType[i] : offWorkout[i];
+    if (w === 'pilates' || isStrength(w)) n++;
+  });
+  return n;
+}
+
+function timeToHour(t) {
+  const [h,m] = t.split(':').map(Number);
+  const total = h*60+m;
+  let best = HOURS[0], bestD = Infinity;
+  HOURS.forEach(hr => {
+    const [hh] = parseHr(hr);
+    const d = Math.abs(hh*60 - total);
+    if (d < bestD) { bestD = d; best = hr; }
+  });
+  return best;
+}
+function parseHr(hr) {
+  const [t,ap] = hr.split(' ');
+  let h = parseInt(t);
+  if (ap === 'PM' && h !== 12) h += 12;
+  if (ap === 'AM' && h === 12) h = 0;
+  return [h, 0];
+}
+function hoursFrom(start, count) {
+  const idx = HI[start];
+  if (idx === undefined) return [];
+  return HOURS.slice(idx, Math.min(idx+count, HOURS.length));
+}
+function clearDayOverrides(i) {
+  Object.keys(cellActivities).forEach(k => { if (k.startsWith(`${i}|`)) delete cellActivities[k]; });
+}
+function getWeekLabel(off) {
+  const now = new Date(), d = now.getDay(), diff = now.getDate() - d + (d===0 ? -6 : 1);
+  const mon = new Date(now); mon.setDate(diff + off*7);
+  const sun = new Date(mon); sun.setDate(mon.getDate()+6);
+  const fmt = x => x.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  return fmt(mon) + ' – ' + fmt(sun);
+}
+function getMondayOf(off) {
+  const now = new Date(), d = now.getDay(), diff = now.getDate() - d + (d===0?-6:1);
+  const mon = new Date(now); mon.setDate(diff + off*7);
+  return mon;
+}
+
+// ── Schedule builders ────────────────────────────────────
+function workSched(d) {
+  const wt = workoutType[d], hasYoga = yogaDays[d], hasClimb = climbDays[d];
+  const hasPreSurf = surfWorkDay[d] && isSurfable(d);
+  const s = {}; HOURS.forEach(h => s[h] = {cls:'free', lb:''});
+  const si = HI[workStart[d]] ?? HI['7 AM'];
+  const ei = HI[workEnd[d]]   ?? HI['5 PM'];
+
+  for (let i = 0; i < si; i++)      s[HOURS[i]] = {cls:'sleep', lb:'sleep'};
+  for (let i = si; i <= ei; i++)     s[HOURS[i]] = {cls:'work',  lb:'work'};
+  if (ei+1 < HOURS.length)          s[HOURS[ei+1]] = {cls:'commute', lb:''};
+  ['9 PM','10 PM','11 PM'].forEach(h => { if (HI[h] !== undefined) s[h] = {cls:'sleep', lb:'sleep'}; });
+
+  if (hasPreSurf && si >= 2) { s[HOURS[si-2]] = {cls:'surf',lb:'🏄'}; s[HOURS[si-1]] = {cls:'surf',lb:'🏄'}; }
+  appointments.filter(a => a.day===d).forEach(a => { s[timeToHour(a.time)] = {cls:'appt',lb:'❗'}; });
+
+  const as = HOURS[ei+1] || '9 PM', an = HOURS[HI[as]+1] || '9 PM';
+  if (hasClimb) {
+    const ct = (climbTime[d] && HI[climbTime[d]] >= HI[as]) ? climbTime[d] : as;
+    s[ct] = {cls:'climb',lb:'🧗'};
+    const nx = HOURS[HI[ct]+1]; if (nx && HI[nx] < HI['9 PM']) s[nx] = {cls:'climb',lb:'🧗'};
+  } else if (hasYoga) {
+    const yt = (HI[yogaTime[d]] >= HI[as]) ? yogaTime[d] : as;
+    s[yt] = {cls:'yoga',lb:'🧘'};
+  } else if (wt === 'pilates') {
+    s[as] = {cls:'pilates',lb:'🤸'};
+    if (an && HI[an] < HI['9 PM']) s[an] = {cls:'pilates run',lb:'🏃'};
+  } else if (isStrength(wt)) {
+    const sc = scCls(wt);
+    s[as] = {cls:sc,lb:'🏋️'};
+    if (an && HI[an] < HI['9 PM']) s[an] = {cls:sc+' run',lb:'🏃'};
+  }
+  Object.entries(cellActivities).forEach(([k,v]) => { const [di,h]=k.split('|'); if (+di===d) s[h]=v; });
   return s;
 }
 
-function offSched(d){
-  const hasYoga=yogaDays[d],hasClimb=climbDays[d],hasSurf=surfDays[d]&&isSurfable(d),ow=offWorkout[d];
-  const s={};HOURS.forEach(h=>s[h]={cls:'free',lb:''});
-  s['5 AM']={cls:'free',lb:''};s['9 PM']={cls:'free',lb:''};s['10 PM']={cls:'free',lb:''};s['11 PM']={cls:'free',lb:''};
-  if(hasSurf){const ss=surfStart[d]||'7 AM';hoursFrom(ss,4).forEach((h,i,arr)=>{s[h]={cls:'surf',lb:'🏄'};});}
-  if(hasYoga){const yt=yogaTime[d]||'9 AM';s[yt]={cls:'yoga',lb:'🧘'};}
-  if(hasClimb){const cs=climbTime[d]||'10 AM';s[cs]={cls:'climb',lb:'🧗'};const nx=HOURS[HI[cs]+1];if(nx)s[nx]={cls:'climb',lb:'🧗'};}
-  if(ow==='pilates'){s['9 AM']={cls:'pilates',lb:'🤸'};s['10 AM']={cls:'pilates run',lb:'🏃'};}
-  else if(isStrength(ow)){const sc=ow==='strength-a'?'strength-a':'strength-b';s['9 AM']={cls:sc,lb:'🏋️'};s['10 AM']={cls:sc+' run',lb:'🏃'};}
-  appointments.filter(a=>a.day===d).forEach(a=>{s[timeToHour(a.time)]={cls:'appt',lb:'❗'};});
+function offSched(d) {
+  const ow = offWorkout[d], hasYoga = yogaDays[d], hasClimb = climbDays[d];
+  const hasSurf = surfDays[d] && isSurfable(d);
+  const s = {}; HOURS.forEach(h => s[h] = {cls:'free',lb:''});
+  if (hasSurf) hoursFrom(surfStart[d]||'7 AM', 4).forEach(h => { s[h] = {cls:'surf',lb:'🏄'}; });
+  if (hasYoga) s[yogaTime[d]||'9 AM'] = {cls:'yoga',lb:'🧘'};
+  if (hasClimb) { const cs=climbTime[d]||'10 AM'; s[cs]={cls:'climb',lb:'🧗'}; const nx=HOURS[HI[cs]+1]; if(nx)s[nx]={cls:'climb',lb:'🧗'}; }
+  if (ow === 'pilates') { s['9 AM']={cls:'pilates',lb:'🤸'}; s['10 AM']={cls:'pilates run',lb:'🏃'}; }
+  else if (isStrength(ow)) { const sc=scCls(ow); s['9 AM']={cls:sc,lb:'🏋️'}; s['10 AM']={cls:sc+' run',lb:'🏃'}; }
+  appointments.filter(a => a.day===d).forEach(a => { s[timeToHour(a.time)] = {cls:'appt',lb:'❗'}; });
+  Object.entries(cellActivities).forEach(([k,v]) => { const [di,h]=k.split('|'); if (+di===d) s[h]=v; });
   return s;
 }
 
-function buildHeader(){document.getElementById('week-label').textContent=getWeekLabel(weekOff);}
-
-function buildSummary(){
-  const row=document.getElementById('summary-row');row.innerHTML='';
-  const wc=workDays.filter(Boolean).length;let pC=0,sC=0;
-  DAYS.forEach((_,i)=>{if(workDays[i]){if(yogaDays[i]||climbDays[i])return;if(workoutType[i]==='pilates')pC++;if(isStrength(workoutType[i]))sC++;}else{if(offWorkout[i]==='pilates')pC++;if(isStrength(offWorkout[i]))sC++;}});
-  const yC=yogaDays.filter(Boolean).length,cC=climbDays.filter(Boolean).length,sfC=surfDays.filter(Boolean).length+surfWorkDay.filter(Boolean).length;
-  const wL=pC>0&&sC>0?`pilates ${pC}× · strength ${sC}×`:pC>0?`pilates · ${pC}×`:sC>0?`strength · ${sC}×`:'no workout';
-  [{cls:'work-pill',pip:'var(--work-b)',lb:`${wc} work days · ${wc*10}h`},{cls:'workout-pill',pip:'var(--pilates-b)',lb:wL},{cls:'yoga-pill',pip:'var(--yoga-b)',lb:`hot yoga · ${yC}×`},{cls:'climb-pill',pip:'var(--climb-b)',lb:`climbing · ${cC}×`},{cls:'surf-pill',pip:'var(--surf-b)',lb:`surf · ${sfC}×`}].forEach(p=>{const el=document.createElement('div');el.className='pill '+p.cls;el.innerHTML=`<div style="width:6px;height:6px;border-radius:50%;background:${p.pip};flex-shrink:0"></div>${p.lb}`;row.appendChild(el);});
+// ── Build: header ────────────────────────────────────────
+function buildHeader() {
+  document.getElementById('week-label').textContent = getWeekLabel(weekOff);
 }
 
-function buildDayControls(){
-  const c=document.getElementById('day-controls');c.innerHTML='';c.appendChild(document.createElement('div'));
-  const now=new Date(),d=now.getDay(),diff=now.getDate()-d+(d===0?-6:1);
-  const mon=new Date(now);mon.setDate(diff+weekOff*7);
-  DAYS.forEach((day,i)=>{
-    const date=new Date(mon);date.setDate(mon.getDate()+i);
-    const mm=String(date.getMonth()+1).padStart(2,'0');
-    const dd=String(date.getDate()).padStart(2,'0');
-    const head=document.createElement('div');head.className='day-head'+(workDays[i]?' is-work':'');
-    head.innerHTML=`<div class="day-name">${day}</div><div class="day-date">${mm}/${dd}</div><div class="toggle${workDays[i]?' on':''}" data-i="${i}"></div><div class="day-badge ${workDays[i]?'work':'off'}">${workDays[i]?'work':'off'}</div>`;
-    head.querySelector('.toggle').addEventListener('click',function(){
-      const idx=+this.dataset.i,count=workDays.filter(Boolean).length;
-      if(!workDays[idx]&&count>=4){const n=document.getElementById('limit-note');n.classList.add('show');setTimeout(()=>n.classList.remove('show'),2000);return;}
-      workDays[idx]=!workDays[idx];
-      if(workDays[idx]){surfDays[idx]=false;workoutType[idx]='pilates';offWorkout[idx]=null;}
-      else{workoutType[idx]=null;surfWorkDay[idx]=false;offWorkout[idx]='none';}
-      save();render();
+// ── Build: day controls ──────────────────────────────────
+function buildDayControls() {
+  const c = document.getElementById('day-controls');
+  c.innerHTML = ''; c.appendChild(document.createElement('div'));
+  const mon = getMondayOf(weekOff);
+  DAYS.forEach((day,i) => {
+    const date = new Date(mon); date.setDate(mon.getDate()+i);
+    const mm = String(date.getMonth()+1).padStart(2,'0');
+    const dd = String(date.getDate()).padStart(2,'0');
+    const head = document.createElement('div');
+    head.className = 'day-head' + (workDays[i] ? ' is-work' : '');
+    head.innerHTML = `<div class="day-name">${day}</div><div class="day-date">${mm}/${dd}</div><div class="toggle${workDays[i]?' on':''}" data-i="${i}"></div><div class="day-badge ${workDays[i]?'work':'off'}">${workDays[i]?'work':'off'}</div>`;
+    head.querySelector('.toggle').addEventListener('click', function() {
+      const idx = +this.dataset.i;
+      workDays[idx] = !workDays[idx];
+      if (workDays[idx]) {
+        surfDays[idx] = false;
+        const wc = workDays.filter(Boolean).length;
+        workoutType[idx] = wc <= 4 ? 'pilates' : 'none';
+        offWorkout[idx] = null;
+      } else {
+        workoutType[idx] = null; surfWorkDay[idx] = false; offWorkout[idx] = 'none';
+      }
+      save(); render();
     });
     c.appendChild(head);
   });
 }
 
-function buildGrid(){
-  const grid=document.getElementById('planner-grid');grid.innerHTML='';
-  const scheds=DAYS.map((_,i)=>workDays[i]?workSched(i):offSched(i));
-  HOURS.forEach(h=>{
-    const tl=document.createElement('div');tl.className='time-lbl';tl.textContent=h;grid.appendChild(tl);
-    DAYS.forEach((_,i)=>{
-      const s=scheds[i][h]||{cls:'free',lb:''};
-      const cell=document.createElement('div');cell.className='cell '+s.cls;
-      if(s.lb)cell.textContent=s.lb;
-      // appt cells get a tap-to-show bubble
-      if(s.cls==='appt'){
-        const appt=appointments.find(a=>a.day===i&&timeToHour(a.time)===h);
-        if(appt){
-          cell.addEventListener('click',e=>{
-            e.stopPropagation();
-            const existing=document.querySelector('.appt-bubble');
-            if(existing&&existing.dataset.key===`${i}-${h}`){existing.remove();return;}
-            document.querySelectorAll('.appt-bubble').forEach(b=>b.remove());
-            const bubble=document.createElement('div');bubble.className='appt-bubble';bubble.dataset.key=`${i}-${h}`;
-            const[hh,mm]=appt.time.split(':');const hNum=parseInt(hh),ampm=hNum>=12?'PM':'AM',h12=hNum%12||12;
-            bubble.innerHTML=`<div class="appt-bubble-title">❗ ${appt.desc}</div><div class="appt-bubble-time">${DAYS[appt.day]} · ${h12}:${mm} ${ampm}</div>${appt.notes?`<div class="appt-bubble-notes">${appt.notes}</div>`:''}`;
-            document.body.appendChild(bubble);
-            // dismiss on scroll
-            const onScroll=()=>{bubble.remove();window.removeEventListener('scroll',onScroll,true);};
-            window.addEventListener('scroll',onScroll,true);
-          });
-        }
+// ── Build: grid ──────────────────────────────────────────
+function buildGrid() {
+  const grid = document.getElementById('planner-grid'); grid.innerHTML = '';
+  const scheds = DAYS.map((_,i) => workDays[i] ? workSched(i) : offSched(i));
+
+  // Find work spans to merge into one tall block
+  const workSpans = DAYS.map((_,i) => {
+    const spans = []; let j = 0;
+    while (j < HOURS.length) {
+      const h = HOURS[j], s = scheds[i][h]||{cls:'free'};
+      if (s.cls.includes('work')) {
+        let span = 1;
+        while (j+span < HOURS.length && (scheds[i][HOURS[j+span]]||{cls:'free'}).cls.includes('work')) span++;
+        spans.push({startH:h, startIdx:j, span}); j += span;
+      } else j++;
+    }
+    return spans;
+  });
+  const absorbed = new Set();
+  DAYS.forEach((_,i) => workSpans[i].forEach(sp => {
+    for (let k=1; k<sp.span; k++) absorbed.add(`${i}-${HOURS[sp.startIdx+k]}`);
+  }));
+
+  HOURS.forEach(h => {
+    const tl = document.createElement('div'); tl.className='time-lbl'; tl.textContent=h; grid.appendChild(tl);
+    DAYS.forEach((_,i) => {
+      if (absorbed.has(`${i}-${h}`)) { const ph=document.createElement('div'); ph.style.display='none'; grid.appendChild(ph); return; }
+      const s = scheds[i][h] || {cls:'free',lb:''};
+      const cell = document.createElement('div'); cell.className = 'cell '+s.cls;
+
+      const span = workSpans[i].find(sp => sp.startH===h);
+      if (span && span.span > 1) {
+        cell.style.gridRow = `span ${span.span}`; cell.style.height = 'auto';
+        cell.style.cssText += ';display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;';
+        const lbl = document.createElement('div'); lbl.style.cssText='font-size:11px;'; lbl.textContent='work';
+        const times = document.createElement('div'); times.style.cssText='font-size:9px;opacity:.6;'; times.textContent=`${workStart[i]}–${workEnd[i]}`;
+        cell.appendChild(lbl); cell.appendChild(times);
+        cell.addEventListener('click', e => { e.stopPropagation(); showWorkEditPopup(i); });
+      } else {
+        if (s.lb) cell.textContent = s.lb;
+      }
+
+      if (s.cls === 'appt') {
+        const appt = appointments.find(a => a.day===i && timeToHour(a.time)===h);
+        if (appt) cell.addEventListener('click', e => { e.stopPropagation(); toggleApptBubble(appt, i, h); });
+      }
+
+      const tappable = s.cls==='free' || cellActivities[`${i}|${h}`] ||
+        ['pilates','strength-a','strength-b','yoga','climb','surf'].some(c => s.cls.startsWith(c));
+      if (tappable && s.cls !== 'appt') {
+        cell.style.cursor = 'pointer';
+        cell.addEventListener('click', e => { e.stopPropagation(); closePopups(); showCellPicker(i,h); });
       }
       grid.appendChild(cell);
     });
   });
-
-  // tap anywhere else to close bubble
-  document.addEventListener('click',()=>{document.querySelectorAll('.appt-bubble').forEach(b=>b.remove());},{once:false});
+  document.addEventListener('click', closePopups);
 }
 
-function buildActPanel(){
-  const grid=document.getElementById('act-grid');grid.innerHTML='';
-  // workout row
-  addL(grid,'workout');
-  DAYS.forEach((_,i)=>{
-    const cell=document.createElement('div');
-    if(workDays[i]){
-      const wt=workoutType[i];
-      if(wt==='pilates'){cell.className='wk-cell pilates-mode';cell.textContent='P';}
-      else if(isStrength(wt)){
-        cell.className='wk-cell '+(wt==='strength-a'?'strength-a-mode':'strength-b-mode');
-        cell.style.cssText+='display:flex;flex-direction:column;gap:2px;';
-        const lbl=document.createElement('div');lbl.style.cssText='font-size:10px;line-height:1;font-family:\'DM Mono\',monospace;';lbl.textContent=wt==='strength-a'?'S·A':'S·B';
-        const sel=document.createElement('select');
-        const sc=wt==='strength-a'?'rgba(42,184,168,.3)':'rgba(240,120,40,.3)';
-        const tc=wt==='strength-a'?'#90f0e0':'var(--strength-t)';
-        sel.style.cssText=`background:#0a0d14;border:1px solid ${sc};border-radius:3px;color:${tc};font-family:'DM Mono',monospace;font-size:9px;cursor:pointer;outline:none;-webkit-appearance:none;text-align:center;padding:1px 2px;width:100%;max-width:52px;`;
-        [['strength-a','S-A (upper)'],['strength-b','S-B (lower)']].forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o.textContent=t;if(v===wt)o.selected=true;sel.appendChild(o);});
-        sel.addEventListener('change',e=>{e.stopPropagation();workoutType[i]=e.target.value;save();render();});
-        sel.addEventListener('click',e=>e.stopPropagation());
-        cell.appendChild(lbl);cell.appendChild(sel);
-        cell.addEventListener('click',()=>{if(isStrength(workoutType[i])){workoutType[i]='none';save();render();}});
-      }
-      else{const atCap=countWk()>=4;cell.className='wk-cell inactive';cell.style.cursor=atCap?'not-allowed':'pointer';cell.style.opacity='0.5';cell.textContent=atCap?'–':'+';}
-      if(wt!=='strength-a'&&wt!=='strength-b') cell.addEventListener('click',()=>{const cur=workoutType[i],next=cur==='pilates'?'strength-a':cur==='none'?'pilates':'none';if(next!=='none'&&cur==='none'&&countWk()>=4)return;workoutType[i]=next;save();render();});
-    }else{
-      const ow=offWorkout[i];
-      if(ow==='pilates'){cell.className='wk-cell pilates-mode';cell.textContent='P';}
-      else if(isStrength(ow)){
-        cell.className='wk-cell '+(ow==='strength-a'?'strength-a-mode':'strength-b-mode');
-        cell.style.cssText+='display:flex;flex-direction:column;gap:2px;';
-        const lbl=document.createElement('div');lbl.style.cssText='font-size:10px;line-height:1;font-family:\'DM Mono\',monospace;';lbl.textContent=ow==='strength-a'?'S·A':'S·B';
-        const sel=document.createElement('select');
-        const sc=ow==='strength-a'?'rgba(42,184,168,.3)':'rgba(240,120,40,.3)';
-        const tc=ow==='strength-a'?'#90f0e0':'var(--strength-t)';
-        sel.style.cssText=`background:#0a0d14;border:1px solid ${sc};border-radius:3px;color:${tc};font-family:'DM Mono',monospace;font-size:9px;cursor:pointer;outline:none;-webkit-appearance:none;text-align:center;padding:1px 2px;width:100%;max-width:52px;`;
-        [['strength-a','S-A (upper)'],['strength-b','S-B (lower)']].forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o.textContent=t;if(v===ow)o.selected=true;sel.appendChild(o);});
-        sel.addEventListener('change',e=>{e.stopPropagation();offWorkout[i]=e.target.value;save();render();});
-        sel.addEventListener('click',e=>e.stopPropagation());
-        cell.appendChild(lbl);cell.appendChild(sel);
-        cell.addEventListener('click',()=>{if(isStrength(offWorkout[i])){offWorkout[i]='none';save();render();}});
-      }
-      else{const atCap=countWk()>=4;cell.className='wk-cell inactive';cell.style.cursor=atCap?'not-allowed':'pointer';cell.style.opacity='0.4';cell.textContent=atCap?'–':'+';}
-      if(!isStrength(ow)) cell.addEventListener('click',()=>{const cur=offWorkout[i],next=cur==='none'?'pilates':cur==='pilates'?'strength-a':'none';if(next!=='none'&&cur==='none'&&countWk()>=4)return;offWorkout[i]=next;save();render();});
+// ── Build: activity panel ────────────────────────────────
+function buildActPanel() {
+  const grid = document.getElementById('act-grid'); grid.innerHTML = '';
+
+  // Workout row
+  addLabel(grid, 'workout');
+  DAYS.forEach((_,i) => {
+    const cell = document.createElement('div');
+    const wt = workDays[i] ? workoutType[i] : offWorkout[i];
+
+    if (wt === 'pilates') {
+      cell.className = 'act-cell pilates-on is-on'; cell.textContent = 'P';
+    } else if (wt === 'strength-a') {
+      makeStrengthCell(cell, 'sa', i);
+    } else if (wt === 'strength-b') {
+      makeStrengthCell(cell, 'sb', i);
+    } else {
+      const atCap = countWorkouts() >= 4;
+      cell.className = 'act-cell'; if (atCap) cell.classList.add('is-locked');
+      cell.textContent = atCap ? '–' : '+';
+    }
+
+    if (wt === 'pilates') {
+      cell.addEventListener('click', () => {
+        if (workDays[i]) workoutType[i] = 'strength-a'; else offWorkout[i] = 'strength-a';
+        clearDayOverrides(i); save(); render();
+      });
+    } else if (!isStrength(wt)) {
+      cell.addEventListener('click', () => {
+        if (countWorkouts() >= 4) return;
+        if (workDays[i]) workoutType[i] = 'pilates'; else offWorkout[i] = 'pilates';
+        clearDayOverrides(i); save(); render();
+      });
     }
     grid.appendChild(cell);
   });
   addGap(grid);
 
-  // hot yoga row
-  addL(grid,'hot yoga');
-  DAYS.forEach((_,i)=>{
-    const isOn=yogaDays[i],yCount=yogaDays.filter(Boolean).length;
-    const cell=document.createElement('div');cell.className='yoga-cell'+(isOn?' yoga-on':'');
-    if(isOn){
-      const lbl=document.createElement('div');lbl.className='yc-label';lbl.textContent='✓ ✕';
-      const sel=document.createElement('select');
-      const opts=workDays[i]?YOGA_TIMES.filter(t=>HI[t]>=HI['6 PM']):YOGA_TIMES;
-      opts.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;if(t===yogaTime[i])o.selected=true;sel.appendChild(o);});
-      sel.addEventListener('change',e=>{e.stopPropagation();yogaTime[i]=e.target.value;save();render();});
-      sel.addEventListener('click',e=>e.stopPropagation());
-      cell.style.cursor='pointer';cell.addEventListener('click',()=>{yogaDays[i]=false;save();render();});
-      cell.appendChild(lbl);cell.appendChild(sel);
-    }else if(!isOn&&yCount>=2){cell.style.opacity='.32';cell.style.cursor='not-allowed';cell.textContent='max 2×';}
-    else{cell.textContent='+ add';cell.addEventListener('click',()=>{yogaDays[i]=true;save();render();});}
-    grid.appendChild(cell);
-  });
-  addGap(grid);
-
-  // climbing row
-  addL(grid,'climbing');
-  DAYS.forEach((_,i)=>{
-    const isOn=climbDays[i],count=climbDays.filter(Boolean).length;
-    const cell=document.createElement('div');
-    if(!isOn&&count>=2){cell.className='opt-cell opt-locked';cell.textContent='–';}
-    else if(isOn){
-      cell.style.cssText='height:42px;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;padding:4px 3px;background:var(--climb);border:1px solid rgba(200,122,32,.55);color:var(--climb-t);cursor:pointer;font-family:\'DM Mono\',monospace;letter-spacing:.02em;';
-      const lbl=document.createElement('div');lbl.style.cssText='font-size:12px;line-height:1;';lbl.textContent='✓ ✕';
-      cell.addEventListener('click',()=>{climbDays[i]=false;save();render();});
-      const sel=document.createElement('select');
-      sel.style.cssText='background:#0a0d14;border:1px solid rgba(255,255,255,.15);border-radius:3px;color:var(--text2);font-family:\'DM Mono\',monospace;font-size:10px;cursor:pointer;outline:none;-webkit-appearance:none;text-align:center;padding:1px 3px;width:100%;max-width:62px;';
-      const times = workDays[i] ? CLIMB_TIMES.filter(t=>HI[t]>=HI['7 PM']) : CLIMB_TIMES;
-      times.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;if(t===climbTime[i])o.selected=true;sel.appendChild(o);});
-      sel.addEventListener('change',e=>{e.stopPropagation();climbTime[i]=e.target.value;save();render();});
-      sel.addEventListener('click',e=>e.stopPropagation());
-      cell.appendChild(lbl);cell.appendChild(sel);
-    }else{
-      cell.className='opt-cell';cell.textContent='+';
-      cell.addEventListener('click',()=>{climbDays[i]=true;save();render();});
+  // Hot yoga row
+  addLabel(grid, 'hot yoga');
+  DAYS.forEach((_,i) => {
+    const isOn = yogaDays[i], count = yogaDays.filter(Boolean).length;
+    const cell = document.createElement('div');
+    if (isOn) {
+      cell.className = 'act-cell yoga-on is-on';
+      const lbl = document.createElement('div'); lbl.style.fontSize='10px'; lbl.textContent='✓ ✕';
+      const sel = makeSelect(YOGA_TIMES, yogaTime[i], v => { yogaTime[i]=v; clearDayOverrides(i); save(); render(); });
+      cell.appendChild(lbl); cell.appendChild(sel);
+      cell.addEventListener('click', () => { yogaDays[i]=false; clearDayOverrides(i); save(); render(); });
+    } else if (count >= 2) {
+      cell.className = 'act-cell is-locked'; cell.textContent = 'max 2×';
+    } else {
+      cell.className = 'act-cell'; cell.textContent = '+';
+      cell.addEventListener('click', () => { yogaDays[i]=true; clearDayOverrides(i); save(); render(); });
     }
     grid.appendChild(cell);
   });
   addGap(grid);
 
-  // surf row
-  addL(grid,'surf');
-  DAYS.forEach((_,i)=>{
-    const isWork=workDays[i],isOn=surfDays[i],isWorkSurf=surfWorkDay[i],surfable=isSurfable(i);
-    const totalSurf=surfDays.filter(Boolean).length+surfWorkDay.filter(Boolean).length;
-    const cell=document.createElement('div');
-    if(isWork){
-      if(!surfable){cell.className='surf-cell surf-locked';cell.textContent='–';}
-      else if(!isWorkSurf&&totalSurf>=2){cell.className='surf-cell surf-locked';cell.textContent='–';}
-      else if(isWorkSurf){
-        cell.className='surf-cell surf-on';
-        const lbl=document.createElement('div');lbl.className='sc-label';lbl.textContent='🤙 ✕';
-        cell.style.cursor='pointer';cell.addEventListener('click',()=>{surfWorkDay[i]=false;save();render();});
+  // Climbing row
+  addLabel(grid, 'climbing');
+  DAYS.forEach((_,i) => {
+    const isOn = climbDays[i], count = climbDays.filter(Boolean).length;
+    const cell = document.createElement('div');
+    if (!isOn && count >= 2) {
+      cell.className = 'act-cell is-locked'; cell.textContent = '–';
+    } else if (isOn) {
+      cell.className = 'act-cell climb-on is-on';
+      const lbl = document.createElement('div'); lbl.style.fontSize='10px'; lbl.textContent='✓ ✕';
+      const times = workDays[i] ? CLIMB_TIMES.filter(t => HI[t] >= HI['7 PM']) : CLIMB_TIMES;
+      const sel = makeSelect(times, climbTime[i], v => { climbTime[i]=v; clearDayOverrides(i); save(); render(); });
+      cell.appendChild(lbl); cell.appendChild(sel);
+      cell.addEventListener('click', () => { climbDays[i]=false; clearDayOverrides(i); save(); render(); });
+    } else {
+      cell.className = 'act-cell'; cell.textContent = '+';
+      cell.addEventListener('click', () => { climbDays[i]=true; clearDayOverrides(i); save(); render(); });
+    }
+    grid.appendChild(cell);
+  });
+  addGap(grid);
+
+  // Surf row
+  addLabel(grid, 'surf');
+  DAYS.forEach((_,i) => {
+    const totalSurf = surfDays.filter(Boolean).length + surfWorkDay.filter(Boolean).length;
+    const cell = document.createElement('div');
+    if (workDays[i]) {
+      if (!isSurfable(i)) {
+        cell.className = 'act-cell is-locked'; cell.textContent = 'no go';
+      } else if (!surfWorkDay[i] && totalSurf >= 2) {
+        cell.className = 'act-cell is-locked'; cell.textContent = 'max 2×';
+      } else if (surfWorkDay[i]) {
+        cell.className = 'act-cell surf-on is-on';
+        const lbl = document.createElement('div'); lbl.style.fontSize='10px'; lbl.textContent='🤙 ✕';
         cell.appendChild(lbl);
-      }else{cell.className='surf-cell';cell.innerHTML='+'+'<br>'+'early';cell.addEventListener('click',()=>{surfWorkDay[i]=true;save();render();});}
-    }else if(!surfable){cell.className='surf-cell surf-locked';cell.textContent='–';}
-    else if(!isOn&&totalSurf>=2){cell.className='surf-cell surf-locked';cell.textContent='–';}
-    else if(isOn){
-      cell.className='surf-cell surf-on';
-      const lbl=document.createElement('div');lbl.className='sc-label';lbl.textContent='🤙 ✕';
-      const sel=document.createElement('select');
-      SURF_STARTS.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;if(t===surfStart[i])o.selected=true;sel.appendChild(o);});
-      sel.addEventListener('change',e=>{e.stopPropagation();surfStart[i]=e.target.value;save();render();});
-      sel.addEventListener('click',e=>e.stopPropagation());
-      cell.style.cursor='pointer';cell.addEventListener('click',()=>{surfDays[i]=false;save();render();});
-      cell.appendChild(lbl);cell.appendChild(sel);
-    }else{cell.className='surf-cell';cell.textContent='+';cell.addEventListener('click',()=>{surfDays[i]=true;save();render();});}
+        cell.addEventListener('click', () => { surfWorkDay[i]=false; clearDayOverrides(i); save(); render(); });
+      } else {
+        cell.className = 'act-cell'; cell.innerHTML = '+<br>early';
+        cell.addEventListener('click', () => { surfWorkDay[i]=true; clearDayOverrides(i); save(); render(); });
+      }
+    } else if (!isSurfable(i)) {
+      cell.className = 'act-cell is-locked'; cell.textContent = 'no go';
+    } else if (!surfDays[i] && totalSurf >= 2) {
+      cell.className = 'act-cell is-locked'; cell.textContent = 'max 2×';
+    } else if (surfDays[i]) {
+      cell.className = 'act-cell surf-on is-on';
+      const lbl = document.createElement('div'); lbl.style.fontSize='10px'; lbl.textContent='🤙 ✕';
+      const sel = makeSelect(SURF_STARTS, surfStart[i], v => { surfStart[i]=v; clearDayOverrides(i); save(); render(); });
+      cell.appendChild(lbl); cell.appendChild(sel);
+      cell.addEventListener('click', () => { surfDays[i]=false; clearDayOverrides(i); save(); render(); });
+    } else {
+      cell.className = 'act-cell'; cell.textContent = '+';
+      cell.addEventListener('click', () => { surfDays[i]=true; clearDayOverrides(i); save(); render(); });
+    }
     grid.appendChild(cell);
   });
 }
 
-function addL(p,t){const l=document.createElement('div');l.className='act-lbl';l.textContent=t;p.appendChild(l);}
-function addGap(p){const g=document.createElement('div');g.className='opt-gap';p.appendChild(g);}
+function makeStrengthCell(cell, cls, i) {
+  const isWork = workDays[i];
+  cell.className = `act-cell ${cls}-on is-on`;
+  cell.style.flexDirection = 'column';
+  const lbl = document.createElement('div'); lbl.style.fontSize='10px'; lbl.textContent = cls==='sa'?'S·A':'S·B';
+  const sel = makeSelect(
+    [['strength-a','S-A (upper)'],['strength-b','S-B (lower)']],
+    isWork ? workoutType[i] : offWorkout[i],
+    v => { if(isWork) workoutType[i]=v; else offWorkout[i]=v; clearDayOverrides(i); save(); render(); }
+  );
+  cell.appendChild(lbl); cell.appendChild(sel);
+  cell.addEventListener('click', () => {
+    if (isWork) workoutType[i]='none'; else offWorkout[i]='none';
+    clearDayOverrides(i); save(); render();
+  });
+}
 
-function buildRotation(){
-  const row=document.getElementById('rotation-row');
-  row.innerHTML='';
+function makeSelect(options, current, onChange) {
+  const sel = document.createElement('select');
+  sel.style.cssText = 'background:#0a0d14;border:1px solid rgba(255,255,255,.15);border-radius:3px;color:var(--text2);font-size:9px;outline:none;-webkit-appearance:none;text-align:center;padding:1px 3px;width:100%;max-width:58px;';
+  const opts = Array.isArray(options[0]) ? options : options.map(v => [v,v]);
+  opts.forEach(([val,label]) => {
+    const o = document.createElement('option'); o.value=val; o.textContent=label;
+    if (val===current) o.selected=true; sel.appendChild(o);
+  });
+  sel.addEventListener('change', e => { e.stopPropagation(); onChange(e.target.value); });
+  sel.addEventListener('click', e => e.stopPropagation());
+  return sel;
+}
 
-  // Determine which circuit rotation (every 2 weeks)
-  const now=new Date(),d=now.getDay(),diff=now.getDate()-d+(d===0?-6:1);
-  const mon=new Date(now);mon.setDate(diff+weekOff*7);
-  const startOfYear=new Date(mon.getFullYear(),0,1);
-  const weekNum=Math.floor((mon-startOfYear)/(7*24*60*60*1000));
-  const rotation=Math.floor(weekNum/2)%2; // 0 or 1, switches every 2 weeks
+function addLabel(parent, text) {
+  const l = document.createElement('div'); l.className='act-lbl'; l.textContent=text; parent.appendChild(l);
+}
+function addGap(parent) {
+  const g = document.createElement('div'); g.className='opt-gap'; parent.appendChild(g);
+}
 
-  const workouts=[
+// ── Build: workout routines ──────────────────────────────
+function buildRotation() {
+  const mon = getMondayOf(weekOff);
+  const startOfYear = new Date(mon.getFullYear(), 0, 1);
+  const weekNum = Math.floor((mon - startOfYear) / (7*24*60*60*1000));
+  const rotation = Math.floor(weekNum/2) % 2;
+
+  const lbl = document.getElementById('circuit-label');
+  if (lbl) lbl.textContent = `· circuit ${rotation===0?'1':'2'} of 2`;
+
+  const WORKOUTS = [
     {
-      id:'sa', badge:'S·A', name:'Upper body', cls:'sa',
-      pre:['Pull ups: 4 / 3 / 3 / 2  (60s rest)','Abs: Criss-cross — 3×20','Abs: Hollow hold — 3×30s'],
+      id:'sa', cls:'sa', badge:'S·A', name:'Upper body',
+      pre: ['Pull ups: 4 / 3 / 3 / 2  (60s rest)', 'Abs: Criss-cross — 3×20', 'Abs: Hollow hold — 3×30s'],
       circuit: rotation===0 ? [
-        'Push ups — 15 reps',
-        'Shoulder press — 12 reps',
-        'Chest press — 12 reps',
-        'Bent over row — 10 each side',
-        'Tricep dips — 15 reps',
-        'Bicep curl — 12 reps',
+        'Push ups — 15 reps', 'Shoulder press — 12 reps', 'Chest press — 12 reps',
+        'Bent over row — 10 each side', 'Tricep dips — 15 reps', 'Bicep curl — 12 reps',
       ] : [
-        'Pike push ups — 12 reps',
-        'Arnold press — 10 reps',
-        'Incline push ups — 15 reps',
-        'Single arm row — 12 each side',
-        'Skull crushers — 12 reps',
-        'Hammer curl — 12 reps',
+        'Smith machine overhead press — 10 reps', 'Arnold press — 10 reps', 'Incline push ups — 15 reps',
+        'Single arm row — 12 each side', 'Skull crushers — 12 reps', 'Hammer curl — 12 reps',
       ],
     },
     {
-      id:'sb', badge:'S·B', name:'Lower body', cls:'sb',
-      pre:['Pull ups: 4 / 3 / 3 / 2  (60s rest)','Abs: Dead bug — 3×10 each side','Abs: Plank hip dip — 3×15'],
+      id:'sb', cls:'sb', badge:'S·B', name:'Lower body',
+      pre: ['Pull ups: 4 / 3 / 3 / 2  (60s rest)', 'Abs: Dead bug — 3×10 each side', 'Abs: Plank hip dip — 3×15'],
       circuit: rotation===0 ? [
-        'Goblet squat — 12 reps',
-        'Romanian deadlift — 12 reps',
-        'Lateral lunge — 10 each side',
-        'Glute bridge — 15 reps',
-        'Step up — 10 each side',
-        'Dumbbell row — 10 each side',
+        'Goblet squat — 12 reps', 'Romanian deadlift — 12 reps', 'Lateral lunge — 10 each side',
+        'Glute bridge — 15 reps', 'Step up — 10 each side', 'Dumbbell row — 10 each side',
       ] : [
-        'Sumo squat — 12 reps',
-        'Single leg deadlift — 10 each side',
-        'Curtsy lunge — 10 each side',
-        'Hip thrust — 15 reps',
-        'Reverse lunge — 10 each side',
-        'Bulgarian split squat — 8 each side',
+        'Sumo squat — 12 reps', 'Single leg deadlift — 10 each side', 'Curtsy lunge — 10 each side',
+        'Hip thrust — 15 reps', 'Reverse lunge — 10 each side', 'Bulgarian split squat — 8 each side',
       ],
     },
   ];
 
-  const lbl=document.getElementById('circuit-label');
-  if(lbl)lbl.textContent=`· circuit ${rotation===0?'1':'2'} of 2`;
+  const row = document.getElementById('rotation-row'); row.innerHTML = '';
+  WORKOUTS.forEach(w => {
+    const ck = `${w.id}-${rotation}`;
+    const custom = customWorkouts[ck];
+    const pre = custom ? custom.pre : w.pre;
+    const circuit = custom ? custom.circuit : w.circuit;
 
-  workouts.forEach(w=>{
-    const section=document.createElement('div');section.className='rot-section';
+    const section = document.createElement('div'); section.className='rot-section';
+    const header = document.createElement('div'); header.className=`rot-header ${w.cls}`;
+    const left = document.createElement('div'); left.className='rot-header-left';
+    const badge = document.createElement('div'); badge.className=`rot-badge ${w.cls}`; badge.textContent=w.badge;
+    const name = document.createElement('div'); name.className='rot-header-name'; name.textContent=w.name+(custom?' ✎':'');
+    left.appendChild(badge); left.appendChild(name);
 
-    const header=document.createElement('div');header.className=`rot-header ${w.cls}`;
-    const left=document.createElement('div');left.className='rot-header-left';
-    const badge=document.createElement('div');badge.className=`rot-badge ${w.cls}`;badge.textContent=w.badge;
-    const name=document.createElement('div');name.className='rot-header-name';name.textContent=w.name;
-    left.appendChild(badge);left.appendChild(name);
-    const chev=document.createElement('div');chev.className='rot-chevron';chev.textContent='▼';
-    header.appendChild(left);header.appendChild(chev);
+    const rightBtns = document.createElement('div'); rightBtns.style.cssText='display:flex;align-items:center;gap:6px;';
+    const editBtn = document.createElement('button');
+    editBtn.style.cssText='background:transparent;border:1px solid var(--border2);border-radius:4px;color:var(--text3);font-size:9px;padding:2px 6px;';
+    editBtn.textContent='edit';
+    const chev = document.createElement('div'); chev.className='rot-chevron'; chev.textContent='▼';
+    rightBtns.appendChild(editBtn); rightBtns.appendChild(chev);
+    header.appendChild(left); header.appendChild(rightBtns);
 
-    const body=document.createElement('div');body.className='rot-body';
+    const body = document.createElement('div'); body.className='rot-body';
 
-    // pre-workout
-    const pt=document.createElement('div');pt.className='rot-section-title';pt.textContent='Pre-workout';body.appendChild(pt);
-    w.pre.forEach(item=>{const el=document.createElement('div');el.className='rot-item';el.textContent=item;body.appendChild(el);});
+    // View mode
+    const viewMode = document.createElement('div');
+    const mkViewSection = (title, items) => {
+      const t = document.createElement('div'); t.className='rot-sec-title'; t.textContent=title; viewMode.appendChild(t);
+      items.forEach(item => { const el=document.createElement('div'); el.className='rot-item'; el.textContent=item; viewMode.appendChild(el); });
+    };
+    mkViewSection('Pre-workout', pre);
+    mkViewSection('Circuit × 2 rounds', circuit);
+    const fin = document.createElement('div'); fin.className=`rot-finish ${w.cls}`; fin.textContent='→ 10 min run'; viewMode.appendChild(fin);
+    body.appendChild(viewMode);
 
-    // circuit
-    const ct=document.createElement('div');ct.className='rot-section-title';ct.textContent='Circuit × 2 rounds';body.appendChild(ct);
-    w.circuit.forEach(item=>{const el=document.createElement('div');el.className='rot-item';el.textContent=item;body.appendChild(el);});
+    // Edit mode
+    const editMode = document.createElement('div'); editMode.style.display='none';
+    const mkEditSection = (title, items, section) => {
+      const t = document.createElement('div'); t.className='rot-sec-title'; t.style.marginTop='4px'; t.textContent=title; editMode.appendChild(t);
+      items.forEach(item => {
+        const inp = document.createElement('input'); inp.type='text'; inp.value=item; inp.className='rot-edit-input';
+        inp.dataset.section=section; editMode.appendChild(inp);
+      });
+    };
+    mkEditSection('Pre-workout', pre, 'pre');
+    mkEditSection('Circuit × 2 rounds', circuit, 'circuit');
 
-    // finish
-    const fin=document.createElement('div');fin.className=`rot-finish ${w.cls}`;fin.textContent='→ 10 min run';body.appendChild(fin);
+    const saveBtn = document.createElement('button'); saveBtn.className='popup-btn save'; saveBtn.style.marginTop='8px'; saveBtn.textContent='✓ save';
+    saveBtn.addEventListener('click', () => {
+      const newPre    = [...editMode.querySelectorAll('input[data-section="pre"]')].map(i=>i.value.trim()).filter(Boolean);
+      const newCirc   = [...editMode.querySelectorAll('input[data-section="circuit"]')].map(i=>i.value.trim()).filter(Boolean);
+      customWorkouts[ck] = {pre:newPre, circuit:newCirc}; save(); buildRotation();
+    });
+    editMode.appendChild(saveBtn);
+    if (custom) {
+      const resetBtn = document.createElement('button'); resetBtn.className='popup-cancel'; resetBtn.textContent='reset to default';
+      resetBtn.addEventListener('click', () => { delete customWorkouts[ck]; save(); buildRotation(); });
+      editMode.appendChild(resetBtn);
+    }
+    body.appendChild(editMode);
 
-    header.addEventListener('click',()=>{
-      const isOpen=body.classList.contains('open');
-      body.classList.toggle('open');
-      chev.classList.toggle('open');
+    header.addEventListener('click', e => { if (editBtn.contains(e.target)) return; body.classList.toggle('open'); chev.classList.toggle('open'); });
+    editBtn.addEventListener('click', e => {
+      e.stopPropagation(); body.classList.add('open'); chev.classList.add('open');
+      const editing = editMode.style.display !== 'none';
+      editMode.style.display = editing ? 'none' : 'block';
+      viewMode.style.display = editing ? 'block' : 'none';
+      editBtn.textContent = editing ? 'edit' : 'done';
     });
 
-    section.appendChild(header);section.appendChild(body);
+    section.appendChild(header); section.appendChild(body);
     row.appendChild(section);
   });
 }
 
-function buildForecast(){
-  const c=document.getElementById('forecast-days');c.innerHTML='';
-  const INFO={good:{wave:'🌊',size:'3–4 ft',tag:'pumping · ≤3kt',cls:'surfable'},ok:{wave:'〰',size:'2–3 ft',tag:'fair to good',cls:'surfable ok-surf'},poor:{wave:'—',size:'flat / blown',tag:'no go',cls:'flat'}};
-  DAYS.forEach((day,i)=>{
-    const cond=surfFcast[i],info=INFO[cond];
-    const card=document.createElement('div');card.className='fday '+info.cls;
-    card.innerHTML=`<div class="fd-name">${day}</div><div class="fd-wave">${info.wave}</div><div class="fd-size">${info.size}</div><select><option value="good" ${cond==='good'?'selected':''}>pumping</option><option value="ok" ${cond==='ok'?'selected':''}>fair to good</option><option value="poor" ${cond==='poor'?'selected':''}>no go</option></select>`;
-    card.querySelector('select').addEventListener('change',e=>{surfFcast[i]=e.target.value;if(!isSurfable(i)){surfDays[i]=false;surfWorkDay[i]=false;}save();render();});
-    c.appendChild(card);
-  });
-}
-
-function buildStats(){
-  const el=document.getElementById('stats');el.innerHTML='';
-  const wc=workDays.filter(Boolean).length;let pilates=0,strength=0;
-  DAYS.forEach((_,i)=>{if(workDays[i]){if(yogaDays[i]||climbDays[i])return;if(workoutType[i]==='pilates')pilates++;if(isStrength(workoutType[i]))strength++;}else{if(offWorkout[i]==='pilates')pilates++;if(isStrength(offWorkout[i]))strength++;}});
-  const totalWk=pilates+strength,yoga=yogaDays.filter(Boolean).length;
-  const climbW=DAYS.filter((_,i)=>workDays[i]&&climbDays[i]).length;
-  const climbO=DAYS.filter((_,i)=>!workDays[i]&&climbDays[i]).length;
-  const surf=surfDays.filter(Boolean).length+surfWorkDay.filter(Boolean).length;
-  const surfGd=DAYS.filter((_,i)=>isSurfable(i)&&!workDays[i]).length;
-  [{l:'Work hours',v:`${wc*10}h`},{l:'Days off',v:`${7-wc}`},{l:'Pilates sessions',v:`${pilates}×`},{l:'Strength sessions',v:`${strength}×`},{l:'Workout days',v:`${totalWk} / 4`,warn:totalWk<3},{l:'Hot yoga',v:`${yoga} / 2`},{l:'Climbing',v:`${climbW+climbO}× (${climbW} post-work, ${climbO} off)`},{l:'Surf sessions',v:`${surf}×`},{l:'Surfable days off',v:`${surfGd}`},{l:'Appointments',v:`${appointments.length}`}].forEach(r=>{el.innerHTML+=`<div class="stat-row"><span class="stat-label">${r.l}</span><span class="stat-val${r.warn?' warn':''}">${r.v}</span></div>`;});
-}
-
-function buildAppointments(){
-  const daySel=document.getElementById('appt-day');daySel.innerHTML='';
-  DAYS.forEach((d,i)=>{const o=document.createElement('option');o.value=i;o.textContent=d;daySel.appendChild(o);});
-  const list=document.getElementById('appt-list');list.innerHTML='';
-  if(appointments.length===0){const e=document.createElement('div');e.style.cssText='font-size:11px;color:var(--text3);padding:4px 0;';e.textContent='no appointments yet';list.appendChild(e);}
-  else appointments.forEach((a,idx)=>{
-    const item=document.createElement('div');item.className='appt-item';
-    const row=document.createElement('div');row.className='appt-item-row';
-    const[hh,mm]=a.time.split(':');const h=parseInt(hh),ampm=h>=12?'PM':'AM',h12=h%12||12;
-    row.innerHTML=`<span class="appt-day">${DAYS[a.day]}</span><span class="appt-time">${h12}:${mm} ${ampm}</span><span class="appt-desc" title="${a.desc}">${a.desc}</span><button class="appt-del" data-idx="${idx}">&#x2715;</button>`;
-    row.querySelector('.appt-del').addEventListener('click',()=>{appointments.splice(idx,1);save();buildAppointments();buildGrid();buildStats();});
-    item.appendChild(row);
-    if(a.notes){const n=document.createElement('div');n.className='appt-notes-text';n.textContent=a.notes;item.appendChild(n);}
-    list.appendChild(item);
-  });
-}
-
-function getWeekLabel(off){
-  const now=new Date(),d=now.getDay(),diff=now.getDate()-d+(d===0?-6:1);
-  const mon=new Date(now);mon.setDate(diff+off*7);const sun=new Date(mon);sun.setDate(mon.getDate()+6);
-  const fmt=x=>x.toLocaleDateString('en-US',{month:'short',day:'numeric'});return fmt(mon)+' – '+fmt(sun);
-}
-
-// ── per-week storage ──────────────────────────────────────
-function getWeekKey(off){
-  const now=new Date(),d=now.getDay(),diff=now.getDate()-d+(d===0?-6:1);
-  const mon=new Date(now);mon.setDate(diff+off*7);
-  return `wp8_week_${mon.getFullYear()}_${mon.getMonth()}_${mon.getDate()}`;
-}
-
-function defaultState(){
-  return {
-    workDays:[true,true,true,true,false,false,false],
-    workoutType:['pilates','pilates','strength-a','strength-b',null,null,null],
-    offWorkout:[null,null,null,null,'none','none','none'],
-    yogaDays:Array(7).fill(false),yogaTime:Array(7).fill('7 AM'),
-    climbDays:Array(7).fill(false),climbTime:Array(7).fill('10 AM'),
-    surfDays:Array(7).fill(false),surfWorkDay:Array(7).fill(false),
-    surfStart:Array(7).fill('7 AM'),surfFcast:Array(7).fill('ok'),
-    appointments:[],notes:''
+// ── Build: surf forecast ─────────────────────────────────
+function buildForecast() {
+  const c = document.getElementById('forecast-days'); c.innerHTML = '';
+  const INFO = {
+    good: {wave:'🌊', size:'3–4 ft', cls:'surfable'},
+    ok:   {wave:'〰',  size:'2–3 ft', cls:'ok-surf'},
+    poor: {wave:'—',   size:'flat',   cls:'flat'},
   };
+  DAYS.forEach((day,i) => {
+    const cond=surfFcast[i], info=INFO[cond];
+    const card = document.createElement('div'); card.className=`fday ${info.cls}`;
+    card.innerHTML=`<div class="fd-name">${day}</div><div class="fd-wave">${info.wave}</div><div class="fd-size">${info.size}</div>`;
+    const sel = document.createElement('select');
+    [['good','pumping'],['ok','fair to good'],['poor','no go']].forEach(([v,t]) => {
+      const o=document.createElement('option'); o.value=v; o.textContent=t; if(v===cond)o.selected=true; sel.appendChild(o);
+    });
+    sel.addEventListener('change', e => {
+      surfFcast[i]=e.target.value;
+      if (!isSurfable(i)) { surfDays[i]=false; surfWorkDay[i]=false; }
+      save(); render();
+    });
+    card.appendChild(sel); c.appendChild(card);
+  });
 }
 
-function save(){
-  try{
-    const state={workDays,workoutType,offWorkout,yogaDays,yogaTime,climbDays,climbTime,surfDays,surfWorkDay,surfStart,surfFcast,appointments,notes};
-    localStorage.setItem(getWeekKey(weekOff),JSON.stringify(state));
-  }catch(e){}
+// ── Build: stats ─────────────────────────────────────────
+function buildStats() {
+  const el = document.getElementById('stats'); el.innerHTML = '';
+  const wc = workDays.filter(Boolean).length;
+  let pilates=0, strength=0;
+  DAYS.forEach((_,i) => {
+    const w = workDays[i] ? workoutType[i] : offWorkout[i];
+    if (w==='pilates') pilates++; else if (isStrength(w)) strength++;
+  });
+  const totalWk = pilates + strength;
+  const yoga    = yogaDays.filter(Boolean).length;
+  const climbW  = DAYS.filter((_,i) => workDays[i]&&climbDays[i]).length;
+  const climbO  = DAYS.filter((_,i) => !workDays[i]&&climbDays[i]).length;
+  const surf    = surfDays.filter(Boolean).length + surfWorkDay.filter(Boolean).length;
+  const surfGd  = DAYS.filter((_,i) => isSurfable(i)&&!workDays[i]).length;
+  [
+    {l:'Work hours',       v:`${wc*10}h`},
+    {l:'Days off',         v:`${7-wc}`},
+    {l:'Pilates sessions', v:`${pilates}×`},
+    {l:'Strength sessions',v:`${strength}×`},
+    {l:'Workout days',     v:`${totalWk} / 4`, warn:totalWk<3},
+    {l:'Hot yoga',         v:`${yoga} / 2`},
+    {l:'Climbing',         v:`${climbW+climbO}× (${climbW} post-work, ${climbO} off)`},
+    {l:'Surf sessions',    v:`${surf}×`},
+    {l:'Surfable days off',v:`${surfGd}`},
+    {l:'Appointments',     v:`${appointments.length}`},
+  ].forEach(r => {
+    el.innerHTML += `<div class="stat-row"><span class="stat-label">${r.l}</span><span class="stat-val${r.warn?' warn':''}">${r.v}</span></div>`;
+  });
 }
 
-function loadWeek(off){
-  try{
-    const raw=localStorage.getItem(getWeekKey(off));
-    const s=raw?JSON.parse(raw):defaultState();
-    workDays=s.workDays||defaultState().workDays;
-    workoutType=s.workoutType||defaultState().workoutType;
-    offWorkout=s.offWorkout||defaultState().offWorkout;
-    yogaDays=s.yogaDays||Array(7).fill(false);
-    yogaTime=s.yogaTime||Array(7).fill('7 AM');
-    climbDays=s.climbDays||Array(7).fill(false);
-    climbTime=s.climbTime||Array(7).fill('10 AM');
-    surfDays=s.surfDays||Array(7).fill(false);
-    surfWorkDay=s.surfWorkDay||Array(7).fill(false);
-    surfStart=s.surfStart||Array(7).fill('7 AM');
-    surfFcast=s.surfFcast||Array(7).fill('ok');
-    appointments=s.appointments||[];
-    notes=s.notes||'';
-  }catch(e){
-    const d=defaultState();
-    workDays=d.workDays;workoutType=d.workoutType;offWorkout=d.offWorkout;
-    yogaDays=d.yogaDays;yogaTime=d.yogaTime;climbDays=d.climbDays;climbTime=d.climbTime;
-    surfDays=d.surfDays;surfWorkDay=d.surfWorkDay;surfStart=d.surfStart;surfFcast=d.surfFcast;
-    appointments=[];notes='';
+// ── Build: appointments ──────────────────────────────────
+function buildAppointments() {
+  const daySel = document.getElementById('appt-day'); daySel.innerHTML='';
+  DAYS.forEach((d,i) => { const o=document.createElement('option'); o.value=i; o.textContent=d; daySel.appendChild(o); });
+  const list = document.getElementById('appt-list'); list.innerHTML='';
+  if (appointments.length===0) {
+    const e=document.createElement('div'); e.style.cssText='font-size:11px;color:var(--text3);padding:4px 0;'; e.textContent='no appointments yet'; list.appendChild(e);
+  } else {
+    appointments.forEach((a,idx) => {
+      const item=document.createElement('div'); item.className='appt-item';
+      const row=document.createElement('div'); row.className='appt-item-row';
+      const [hh,mm]=a.time.split(':'); const h=parseInt(hh), ampm=h>=12?'PM':'AM', h12=h%12||12;
+      row.innerHTML=`<span class="appt-day">${DAYS[a.day]}</span><span class="appt-time">${h12}:${mm} ${ampm}</span><span class="appt-desc" title="${a.desc}">${a.desc}</span><button class="appt-del">✕</button>`;
+      row.querySelector('.appt-del').addEventListener('click', () => { appointments.splice(idx,1); save(); buildAppointments(); buildGrid(); buildStats(); });
+      item.appendChild(row);
+      if (a.notes) { const n=document.createElement('div'); n.className='appt-note-text'; n.textContent=a.notes; item.appendChild(n); }
+      list.appendChild(item);
+    });
   }
 }
 
-function render(){buildHeader();buildSummary();buildDayControls();buildGrid();buildActPanel();buildRotation();buildForecast();buildStats();buildAppointments();document.getElementById('notes-area').value=notes;}
-
-document.getElementById('prev-week').addEventListener('click',()=>{weekOff--;loadWeek(weekOff);render();});
-document.getElementById('next-week').addEventListener('click',()=>{weekOff++;loadWeek(weekOff);render();});
-document.getElementById('reset-btn').addEventListener('click',()=>{
-  const d=defaultState();
-  workDays=d.workDays;workoutType=d.workoutType;offWorkout=d.offWorkout;
-  yogaDays=d.yogaDays;yogaTime=d.yogaTime;climbDays=d.climbDays;climbTime=d.climbTime;
-  surfDays=d.surfDays;surfWorkDay=d.surfWorkDay;surfStart=d.surfStart;surfFcast=d.surfFcast;
-  appointments=[];notes='';save();render();
-});
-document.getElementById('appt-add-btn').addEventListener('click',()=>{
-  const day=+document.getElementById('appt-day').value,time=document.getElementById('appt-time').value,desc=document.getElementById('appt-desc').value.trim(),apptNotes=document.getElementById('appt-notes').value.trim();
-  if(!desc)return;appointments.push({day,time,desc,notes:apptNotes});appointments.sort((a,b)=>a.day-b.day||a.time.localeCompare(b.time));
-  document.getElementById('appt-desc').value='';document.getElementById('appt-notes').value='';save();buildAppointments();buildGrid();buildStats();
-});
-document.getElementById('notes-area').addEventListener('input',e=>{notes=e.target.value;save();});
-loadWeek(weekOff);render();
-
-// register inline service worker for offline support
-if('serviceWorker' in navigator){
-  const swCode=`
-    const CACHE='weekplan-v1';
-    const ASSETS=[
-      'https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700&display=swap'
-    ];
-    self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS).catch(()=>{})));self.skipWaiting();});
-    self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));});
-    self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>new Response('',{status:408}))));});
-  `;
-  const blob=new Blob([swCode],{type:'application/javascript'});
-  const url=URL.createObjectURL(blob);
-  navigator.serviceWorker.register(url).catch(()=>{});
+// ── Build: checklist ─────────────────────────────────────
+function buildChecklist() {
+  const container = document.getElementById('checklist-items'); container.innerHTML='';
+  checklist.forEach((item,idx) => {
+    const row=document.createElement('div'); row.className='checklist-item';
+    const cb=document.createElement('input'); cb.type='checkbox'; cb.className='checklist-cb'; cb.checked=item.done;
+    cb.addEventListener('change', () => { checklist[idx].done=cb.checked; save(); buildChecklist(); });
+    const txt=document.createElement('span'); txt.className='checklist-text'+(item.done?' done':''); txt.textContent=item.text;
+    txt.addEventListener('click', () => { checklist[idx].done=!checklist[idx].done; save(); buildChecklist(); });
+    const del=document.createElement('button'); del.className='checklist-del'; del.textContent='✕';
+    del.addEventListener('click', () => { checklist.splice(idx,1); save(); buildChecklist(); });
+    row.appendChild(cb); row.appendChild(txt); row.appendChild(del);
+    container.appendChild(row);
+  });
 }
+
+// ── Popups ────────────────────────────────────────────────
+function closePopups() {
+  document.querySelectorAll('.popup-box').forEach(p => p.remove());
+}
+
+function toggleApptBubble(appt, dayIdx, hour) {
+  const key = `${dayIdx}-${hour}`;
+  const existing = document.querySelector('.popup-box.appt-style');
+  if (existing && existing.dataset.key===key) { existing.remove(); return; }
+  closePopups();
+  const [hh,mm]=appt.time.split(':'); const h=parseInt(hh), ampm=h>=12?'PM':'AM', h12=h%12||12;
+  const box = document.createElement('div'); box.className='popup-box appt-style'; box.dataset.key=key;
+  box.innerHTML = `<div class="popup-title">❗ ${appt.desc}</div><div class="popup-sub">${DAYS[appt.day]} · ${h12}:${mm} ${ampm}</div>${appt.notes?`<div class="popup-notes">${appt.notes}</div>`:''}`;
+  document.body.appendChild(box);
+  const onScroll = () => { box.remove(); window.removeEventListener('scroll',onScroll,true); };
+  window.addEventListener('scroll', onScroll, true);
+}
+
+function showWorkEditPopup(dayIdx) {
+  closePopups();
+  const box = document.createElement('div'); box.className='popup-box work-style';
+  box.innerHTML=`<div class="popup-title" style="color:var(--work-t);">⏱ ${DAYS[dayIdx]} work hours</div>`;
+  const startRow=document.createElement('div'); startRow.className='popup-row';
+  startRow.innerHTML='<span>start</span>';
+  const startSel=document.createElement('select'); startSel.className='popup-select';
+  HOURS.forEach(h=>{const o=document.createElement('option');o.value=h;o.textContent=h;if(h===workStart[dayIdx])o.selected=true;startSel.appendChild(o);});
+  startRow.appendChild(startSel); box.appendChild(startRow);
+  const endRow=document.createElement('div'); endRow.className='popup-row';
+  endRow.innerHTML='<span>end</span>';
+  const endSel=document.createElement('select'); endSel.className='popup-select';
+  HOURS.forEach(h=>{const o=document.createElement('option');o.value=h;o.textContent=h;if(h===workEnd[dayIdx])o.selected=true;endSel.appendChild(o);});
+  endRow.appendChild(endSel); box.appendChild(endRow);
+  const saveBtn=document.createElement('button'); saveBtn.className='popup-btn save'; saveBtn.style.marginTop='8px'; saveBtn.textContent='save';
+  saveBtn.addEventListener('click',()=>{workStart[dayIdx]=startSel.value;workEnd[dayIdx]=endSel.value;save();render();box.remove();});
+  box.appendChild(saveBtn); document.body.appendChild(box);
+  box.addEventListener('click',e=>e.stopPropagation());
+  const onScroll=()=>{box.remove();window.removeEventListener('scroll',onScroll,true);};
+  window.addEventListener('scroll',onScroll,true);
+}
+
+function showCellPicker(dayIdx, hour) {
+  closePopups();
+  const isWork = workDays[dayIdx];
+  const key = `${dayIdx}|${hour}`;
+  const nextH = HOURS[HI[hour]+1];
+  const nextKey = nextH ? `${dayIdx}|${nextH}` : null;
+
+  const set = (cls, lb, cls2, lb2, updater) => {
+    cellActivities[key] = {cls,lb};
+    if (cls2 && nextKey) cellActivities[nextKey] = {cls:cls2,lb:lb2};
+    if (updater) updater(); save(); render(); closePopups();
+  };
+  const clear = () => {
+    delete cellActivities[key]; if(nextKey) delete cellActivities[nextKey];
+    if (isWork) { workoutType[dayIdx]='none'; yogaDays[dayIdx]=false; climbDays[dayIdx]=false; surfWorkDay[dayIdx]=false; }
+    else { offWorkout[dayIdx]='none'; yogaDays[dayIdx]=false; climbDays[dayIdx]=false; surfDays[dayIdx]=false; }
+    save(); render(); closePopups();
+  };
+
+  const options = [
+    {label:'🤸 Pilates',    action:()=>set('pilates','🤸','pilates run','🏃',()=>{if(isWork)workoutType[dayIdx]='pilates';else offWorkout[dayIdx]='pilates';})},
+    {label:'🏋️ Strength A', action:()=>set('strength-a','🏋️','strength-a run','🏃',()=>{if(isWork)workoutType[dayIdx]='strength-a';else offWorkout[dayIdx]='strength-a';})},
+    {label:'🏋️ Strength B', action:()=>set('strength-b','🏋️','strength-b run','🏃',()=>{if(isWork)workoutType[dayIdx]='strength-b';else offWorkout[dayIdx]='strength-b';})},
+    {label:'🧘 Hot yoga',   action:()=>set('yoga','🧘',null,null,()=>{yogaDays[dayIdx]=true;yogaTime[dayIdx]=hour;})},
+    {label:'🧗 Climbing',   action:()=>set('climb','🧗','climb','🧗',()=>{climbDays[dayIdx]=true;climbTime[dayIdx]=hour;})},
+  ];
+  if (isWork) options.push({label:'🏄 Early surf',action:()=>set('surf','🏄','surf','🏄',()=>{surfWorkDay[dayIdx]=true;})});
+  else if (isSurfable(dayIdx)) options.push({label:'🏄 Surf',action:()=>set('surf','🏄','surf','🏄',()=>{surfDays[dayIdx]=true;surfStart[dayIdx]=hour;})});
+  if (cellActivities[key]) options.push({label:'✕ clear slot', action:clear, muted:true});
+
+  const box = document.createElement('div'); box.className='popup-box';
+  const title=document.createElement('div'); title.className='popup-sub'; title.textContent=`${DAYS[dayIdx]} · ${hour}`; box.appendChild(title);
+  options.forEach(opt=>{
+    const btn=document.createElement('button'); btn.className='popup-btn'+(opt.muted?' muted':''); btn.textContent=opt.label;
+    btn.addEventListener('click',e=>{e.stopPropagation();opt.action();});
+    box.appendChild(btn);
+  });
+  const cancel=document.createElement('button'); cancel.className='popup-cancel'; cancel.textContent='cancel';
+  cancel.addEventListener('click',e=>{e.stopPropagation();closePopups();}); box.appendChild(cancel);
+  document.body.appendChild(box);
+  box.addEventListener('click',e=>e.stopPropagation());
+  const onScroll=()=>{box.remove();window.removeEventListener('scroll',onScroll,true);};
+  window.addEventListener('scroll',onScroll,true);
+}
+
+// ── Persist ───────────────────────────────────────────────
+function weekKey(off) {
+  const mon = getMondayOf(off);
+  return `wp9_${mon.getFullYear()}_${mon.getMonth()}_${mon.getDate()}`;
+}
+function defaultState() {
+  return {
+    workDays: [true,true,true,true,false,false,false],
+    workStart: Array(7).fill('7 AM'), workEnd: Array(7).fill('5 PM'),
+    workoutType: ['pilates','pilates','strength-a','strength-b',null,null,null],
+    offWorkout: [null,null,null,null,'none','none','none'],
+    yogaDays: Array(7).fill(false), yogaTime: Array(7).fill('7 AM'),
+    climbDays: Array(7).fill(false), climbTime: Array(7).fill('10 AM'),
+    surfDays: Array(7).fill(false), surfWorkDay: Array(7).fill(false), surfStart: Array(7).fill('7 AM'),
+    surfFcast: Array(7).fill('ok'),
+    appointments: [], cellActivities: {}, customWorkouts: {}, checklist: [], notes: '',
+  };
+}
+function save() {
+  try {
+    const state = {workDays,workStart,workEnd,workoutType,offWorkout,yogaDays,yogaTime,climbDays,climbTime,surfDays,surfWorkDay,surfStart,surfFcast,appointments,cellActivities,customWorkouts,checklist,notes};
+    localStorage.setItem(weekKey(weekOff), JSON.stringify(state));
+  } catch(e) {}
+}
+function loadWeek(off) {
+  try {
+    const raw = localStorage.getItem(weekKey(off));
+    const s = raw ? JSON.parse(raw) : defaultState();
+    const d = defaultState();
+    workDays     = s.workDays     || d.workDays;
+    workStart    = s.workStart    || d.workStart;
+    workEnd      = s.workEnd      || d.workEnd;
+    workoutType  = s.workoutType  || d.workoutType;
+    offWorkout   = s.offWorkout   || d.offWorkout;
+    yogaDays     = s.yogaDays     || d.yogaDays;
+    yogaTime     = s.yogaTime     || d.yogaTime;
+    climbDays    = s.climbDays    || d.climbDays;
+    climbTime    = s.climbTime    || d.climbTime;
+    surfDays     = s.surfDays     || d.surfDays;
+    surfWorkDay  = s.surfWorkDay  || d.surfWorkDay;
+    surfStart    = s.surfStart    || d.surfStart;
+    surfFcast    = s.surfFcast    || d.surfFcast;
+    appointments = s.appointments || [];
+    cellActivities = s.cellActivities || {};
+    customWorkouts = s.customWorkouts || {};
+    checklist    = s.checklist    || [];
+    notes        = s.notes        || '';
+  } catch(e) { const d=defaultState(); Object.assign({workDays,workStart,workEnd,workoutType,offWorkout,yogaDays,yogaTime,climbDays,climbTime,surfDays,surfWorkDay,surfStart,surfFcast},d); appointments=[];cellActivities={};customWorkouts={};checklist=[];notes=''; }
+}
+
+// ── Render ────────────────────────────────────────────────
+function render() {
+  buildHeader(); buildDayControls(); buildGrid();
+  buildActPanel(); buildRotation(); buildForecast();
+  buildStats(); buildAppointments(); buildChecklist();
+}
+
+// ── Events ────────────────────────────────────────────────
+document.getElementById('prev-week').addEventListener('click', () => { weekOff--; loadWeek(weekOff); render(); });
+document.getElementById('next-week').addEventListener('click', () => { weekOff++; loadWeek(weekOff); render(); });
+document.getElementById('reset-btn').addEventListener('click', () => {
+  const d = defaultState();
+  workDays=d.workDays; workStart=d.workStart; workEnd=d.workEnd;
+  workoutType=d.workoutType; offWorkout=d.offWorkout;
+  yogaDays=d.yogaDays; yogaTime=d.yogaTime; climbDays=d.climbDays; climbTime=d.climbTime;
+  surfDays=d.surfDays; surfWorkDay=d.surfWorkDay; surfStart=d.surfStart; surfFcast=d.surfFcast;
+  appointments=[]; cellActivities={}; customWorkouts={}; checklist=[]; notes='';
+  save(); render();
+});
+document.getElementById('appt-add-btn').addEventListener('click', () => {
+  const day=+document.getElementById('appt-day').value,
+        time=document.getElementById('appt-time').value,
+        desc=document.getElementById('appt-desc').value.trim(),
+        apptNotes=document.getElementById('appt-notes').value.trim();
+  if (!desc) return;
+  appointments.push({day,time,desc,notes:apptNotes});
+  appointments.sort((a,b) => a.day-b.day || a.time.localeCompare(b.time));
+  document.getElementById('appt-desc').value=''; document.getElementById('appt-notes').value='';
+  save(); buildAppointments(); buildGrid(); buildStats();
+});
+
+const addChecklistItem = () => {
+  const inp=document.getElementById('checklist-input');
+  const text=inp.value.trim(); if (!text) return;
+  checklist.push({text,done:false}); inp.value='';
+  save(); buildChecklist();
+};
+document.getElementById('checklist-add').addEventListener('click', addChecklistItem);
+document.getElementById('checklist-input').addEventListener('keydown', e => { if(e.key==='Enter') addChecklistItem(); });
+
+// Collapsible sections
+[
+  ['appt-header','appt-body','appt-chev','block'],
+  ['rotation-header','rotation-body','rotation-chev','block'],
+  ['forecast-header','forecast-body','forecast-chev','block'],
+  ['stats-header','stats-body','stats-chev','block'],
+].forEach(([hId,bId,cId,display]) => {
+  document.getElementById(hId).addEventListener('click', () => {
+    const body=document.getElementById(bId), chev=document.getElementById(cId);
+    const open = body.style.display !== 'none';
+    body.style.display = open ? 'none' : display;
+    if (chev) chev.classList.toggle('open', !open);
+  });
+});
+
+// Service worker for offline
+if ('serviceWorker' in navigator) {
+  const sw=`self.addEventListener('install',e=>{self.skipWaiting();});self.addEventListener('fetch',e=>{e.respondWith(caches.open('wp').then(c=>c.match(e.request).then(r=>r||fetch(e.request))));});`;
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});
+}
+
+loadWeek(weekOff); render();
 </script>
 </body>
 </html>
